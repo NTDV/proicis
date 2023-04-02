@@ -1,0 +1,30 @@
+input UserInput {
+    firstName: String
+    secondName: String
+    thirdName: String
+
+    urlVkontakte: String
+    urlTelegram: String
+
+    group: String
+    organization: String
+}
+
+type User {
+    id: ID
+
+    firstName: String
+    secondName: String
+    thirdName: String
+
+    urlVkontakte: String
+    urlTelegram: String
+
+    group: String
+    organization: String
+}
+
+type Query {
+    getAllParticipants: [User]
+    getAllAdministrators: [User]
+}

@@ -1,0 +1,20 @@
+type FileUploadResult {
+    id: String!
+}
+
+enum FileAccessPolicy {
+    Public,
+
+    Owner,
+    Administrators,
+    Moderators,
+    Mentors,
+    Participants,
+
+    Team
+}
+
+extend type Mutation {
+    uploadFile(file: Upload!, owner: Int!, policy: [FileAccessPolicy!]!): FileUploadResult!
+    uploadParticipants(file: Upload!): FileUploadResult!
+}
