@@ -6,11 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.User;
-import ru.ntdv.proicis.crud.model.UserRole;
 import ru.ntdv.proicis.crud.repository.CredentialsRepository;
 
 import java.util.NoSuchElementException;
-import java.util.Set;
 
 @Service
 public
@@ -23,11 +21,6 @@ private PasswordEncoder passwordEncoder;
 public
 Credentials getById(final Long id) throws NoSuchElementException {
     return credentialsRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No such credentials found."));
-}
-
-public
-Set<Credentials> findAllByRolesContains(final UserRole.Role role) {
-    return credentialsRepository.findAllByRolesContains(role.getUserRole());
 }
 
 public

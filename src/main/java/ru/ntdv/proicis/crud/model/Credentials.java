@@ -53,19 +53,19 @@ Credentials from(final Authentication authentication) throws BadCredentialsExcep
 @Override
 public
 Collection<? extends GrantedAuthority> getAuthorities() {
-    return getRoles();
+    return roles;
 }
 
 @Override
 public
 String getPassword() {
-    return getSecret();
+    return secret;
 }
 
 @Override
 public
 String getUsername() {
-    return getLogin();
+    return login;
 }
 
 @Override

@@ -90,9 +90,10 @@ void store(final StringBuilder data, final String originalFileName, final String
 public
 Stream<Path> loadAll() throws FileSystemException {
     try {
-        return Files.walk(this.rootLocation, 1)
-                    .filter(path -> !path.equals(this.rootLocation))
-                    .map(path -> this.rootLocation.relativize(path));
+        try (final Stream<Path> walk = Files.walk(this.rootLocation, 1)) {
+            return walk.filter(path -> !path.equals(this.rootLocation))
+                       .map(path -> this.rootLocation.relativize(path));
+        }
     } catch (IOException e) {
         throw new FileSystemException("Failed to read stored files");
     }
