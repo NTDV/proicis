@@ -1,0 +1,41 @@
+package ru.ntdv.proicis.graphql.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import ru.ntdv.proicis.buisness.model.Hardness;
+import ru.ntdv.proicis.buisness.model.Skill;
+import ru.ntdv.proicis.constant.ThemeState;
+
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Data
+@AllArgsConstructor
+public class Theme {
+    private Long id;
+
+    private String title;
+    private String description;
+
+    private FileUploadResult presentationSlide;
+    private Hardness hardness;
+
+    private Set<Skill> skills;
+    private User author;
+
+    private Set<User> mentors;
+
+    private ThemeState state;
+
+    public Theme(final ru.ntdv.proicis.crud.model.Theme dbTheme) {
+        id = dbTheme.getId();
+        title = dbTheme.getTitle();
+        description = dbTheme.getDescription();
+        presentationSlide = new FileUploadResult(dbTheme.getPresentationSlide().getId());
+        hardness = dbTheme.getHardness();
+        skills = dbTheme.getSkills();
+        author = new User(dbTheme.getAuthor());
+        mentors = dbTheme.getMentors().stream().map(User::new).collect(Collectors.toSet());
+        state = dbTheme.getState();
+    }
+}

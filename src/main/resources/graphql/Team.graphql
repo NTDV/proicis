@@ -1,0 +1,50 @@
+enum TeamState {
+    Banned,
+    Denied,
+    InProgress,
+    Approved,
+    End
+}
+
+type Team {
+    id: ID!
+
+    title: String!
+    chosenTheme: Theme
+    chosenMentor: User
+
+    participants: [User!]!
+    preferThemes: [Theme!]!
+    state: TeamState!
+}
+
+input TeamInput {
+    title: String!
+    participants: [ID!]!
+    preferThemes: [ID!]!
+}
+
+extend type Query {
+    getTeam(teamId: ID!): Team!
+    getAllTeams: [Team!]!
+
+    getMyTeams: [Team!]!
+    getMentorsTeam(userId: ID!): Team!
+}
+
+extend type Mutation {
+    createTeam(teamInput: TeamInput!): Team!
+    updateTeam(teamId: ID!, team: TeamInput!): Team!
+    deleteTeam(teamId: ID!): Boolean!
+
+    addParticipantToTeam(teamId: ID!, userId: ID!): Team!
+    removeParticipantFromTeam(teamId: ID!, userId: ID!): Team!
+
+    setMentor(teamId: ID!, userId: ID!): Team!
+    removeMentor(teamId: ID!): Team!
+
+    setTheme(teamId: ID!, themeId: ID!): Team!
+    removeTheme(teamId: ID!): Team!
+
+    changeTeamState(teamId: ID!, state: TeamState!): Team!
+}

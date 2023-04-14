@@ -1,19 +1,19 @@
 package ru.ntdv.proicis.graphql.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import ru.ntdv.proicis.crud.model.File;
+
 import java.util.UUID;
 
-public class FileUploadResult {
-    UUID id;
+@Data
+@AllArgsConstructor
+public
+class FileUploadResult {
+private UUID id;
 
-    public FileUploadResult(UUID id) {
-        this.id = id;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public void setId(UUID id) {
-        this.id = id;
-    }
+public
+FileUploadResult(File file) {
+    this.id = file.getId();
+}
 }

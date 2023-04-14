@@ -7,8 +7,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
+import static ru.ntdv.proicis.constant.Validations.URLTELEGRAM_PATTERN_REGEXP;
+
 public class TelegramUrl implements Url {
-    private static final Pattern pattern = Pattern.compile("((?<id>.+)\\.t.me)|((http://|https://)?t\\.me/|@).+");
+    private static final Pattern pattern = Pattern.compile(URLTELEGRAM_PATTERN_REGEXP);
     private final URL url;
 
     public TelegramUrl(String stringUrl) throws IllegalArgumentException {
@@ -17,16 +19,6 @@ public class TelegramUrl implements Url {
 
     public TelegramUrl(final User user) throws IllegalArgumentException {
         this(user.getUrlVkontakte());
-    }
-
-    @Override
-    public URL getLink() {
-        return url;
-    }
-
-    @Override
-    public String getLinkAsString() {
-        return url.toString();
     }
 
     public static URL getUrlFromString(String stringUrl) throws IllegalArgumentException {
@@ -49,5 +41,15 @@ public class TelegramUrl implements Url {
         } else {
             throw new IllegalArgumentException("Неверный формат ссылки.");
         }
+    }
+
+    @Override
+    public URL getLink() {
+        return url;
+    }
+
+    @Override
+    public String getLinkAsString() {
+        return url.toString();
     }
 }

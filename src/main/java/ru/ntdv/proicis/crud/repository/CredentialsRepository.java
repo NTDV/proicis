@@ -6,12 +6,18 @@ import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.User;
 import ru.ntdv.proicis.crud.model.UserRole;
 
-import java.util.List;
+import java.util.Set;
 
 @Repository
-public interface CredentialsRepository extends JpaRepository<Credentials, Long> {
-    Credentials findByLogin(final String login);
-    Credentials findByUser(final User user);
-    List<Credentials> findAllByRolesContains(final UserRole role);
-    Credentials findFirstByLoginStartsWithOrderByIdDesc(final String login);
+public
+interface CredentialsRepository extends JpaRepository<Credentials, Long> {
+Credentials findFirstByUserIdAndRolesContains(final Long userId, final UserRole role);
+
+Credentials findByLogin(final String login);
+
+Credentials findByUser(final User user);
+
+Set<Credentials> findAllByRolesContains(final UserRole role);
+
+Credentials findFirstByLoginStartsWithOrderByIdDesc(final String login);
 }

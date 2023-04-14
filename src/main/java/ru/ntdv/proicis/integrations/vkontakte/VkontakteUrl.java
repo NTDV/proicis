@@ -7,8 +7,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.regex.Pattern;
 
+import static ru.ntdv.proicis.constant.Validations.URLVKONTAKTE_PATTERN_REGEXP;
+
 public class VkontakteUrl implements Url {
-    private static final Pattern pattern = Pattern.compile("((http://|https://)?vk\\.com/|@|(id)).+");
+    private static final Pattern pattern = Pattern.compile(URLVKONTAKTE_PATTERN_REGEXP);
     private final URL url;
 
     public VkontakteUrl(final String stringUrl) throws IllegalArgumentException {
@@ -17,16 +19,6 @@ public class VkontakteUrl implements Url {
 
     public VkontakteUrl(final User user) throws IllegalArgumentException {
         this(user.getUrlVkontakte());
-    }
-
-        @Override
-    public URL getLink() {
-        return url;
-    }
-
-    @Override
-    public String getLinkAsString() {
-        return url.toString();
     }
 
     public static URL getUrlFromString(final String stringUrl) throws IllegalArgumentException {
@@ -44,5 +36,15 @@ public class VkontakteUrl implements Url {
         } else {
             throw new IllegalArgumentException("Неверный формат ссылки.");
         }
+    }
+
+    @Override
+    public URL getLink() {
+        return url;
+    }
+
+    @Override
+    public String getLinkAsString() {
+        return url.toString();
     }
 }

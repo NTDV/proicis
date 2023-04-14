@@ -1,6 +1,0 @@
-enum UserRole {
-    Administrator,
-    Moderator,
-    Mentor,
-    Participant
-}

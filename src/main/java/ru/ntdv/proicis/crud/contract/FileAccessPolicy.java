@@ -1,6 +1,7 @@
 package ru.ntdv.proicis.crud.contract;
 
-public enum FileAccessPolicy {
+public
+enum FileAccessPolicy {
     Public,
 
     Owner,
@@ -11,6 +12,6 @@ public enum FileAccessPolicy {
 
     Team;
 
-    private static final FileAccessPolicy[] Registered = { Owner, Administrators, Moderators, Mentors, Participants };
+public static final FileAccessPolicy[] Registered = { Owner, Administrators, Moderators, Mentors, Participants };
 
 }

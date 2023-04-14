@@ -15,6 +15,7 @@ enum FileAccessPolicy {
 }
 
 extend type Mutation {
-    uploadFile(file: Upload!, owner: Int!, policy: [FileAccessPolicy!]!): FileUploadResult!
-    uploadParticipants(file: Upload!): FileUploadResult!
+    uploadFile(file: Upload!, policy: [FileAccessPolicy!]!): FileUploadResult!
+
+    importParticipants(file: Upload!): FileUploadResult!
 }
