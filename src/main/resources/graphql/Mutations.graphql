@@ -1,0 +1,67 @@
+type Mutation {
+  #_____________________________________________ STAGEINFO START _________________________________________________________
+  updateStageInfo(stageInfoId: ID!, stageInfoInput: StageInfoInput!): StageInfo! # todo: unimplemented
+  deleteStageInfo(stageInfoId: ID!): Boolean! # todo: unimplemented
+  #_____________________________________________ STAGEINFO END ___________________________________________________________
+
+  #_____________________________________________ SEASON START ____________________________________________________________
+  createSeason(seasonInput: SeasonInput!): Season!
+  updateSeason(seasonId: ID!, seasonInput: SeasonInput!): Season!
+  deleteSeason(seasonId: ID!): Boolean!
+
+  addStageInfoToSeason(seasonId: ID!, stageInfoInput: StageInfoInput!): Season!
+  addCreatedStageInfoToSeason(seasonId: ID!, stageInfoId: ID!): Season!
+  removeStageInfoFromSeason(seasonId: ID!, stageInfoId: ID!): Season!
+  #_____________________________________________ SEASON END ______________________________________________________________
+
+  #_____________________________________________ CREDENTIALS START ___________________________________________________
+  registerAdmin(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
+  registerModerator(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
+  registerMentor(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
+  registerParticipant(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
+
+  updateCredentials(oldCredentials: CredentialsInput!, newCredentials: CredentialsInput!): String!
+  #_____________________________________________ CREDENTIALS END _____________________________________________________
+
+  #_____________________________________________ FILE START __________________________________________________________
+  uploadFile(file: Upload!, policy: [FileAccessPolicy!]!): FileUploadResult!
+
+  importParticipants(file: Upload!): FileUploadResult!
+  #_____________________________________________ FILE END ____________________________________________________________
+
+  #_____________________________________________ TEAM START __________________________________________________________
+  createTeam(teamInput: TeamInput!): Team!
+  updateTeam(teamId: ID!, team: TeamInput!): Team!
+  deleteTeam(teamId: ID!): Boolean!
+
+  addParticipantToTeam(teamId: ID!, userId: ID!): Team!
+  removeParticipantFromTeam(teamId: ID!, userId: ID!): Team!
+
+  setMentor(teamId: ID!, userId: ID!): Team!
+  removeMentor(teamId: ID!): Team!
+
+  setTheme(teamId: ID!, themeId: ID!): Team!
+  removeTheme(teamId: ID!): Team!
+
+  changeTeamState(teamId: ID!, state: TeamState!): Team!
+
+  addSeasonToTeam(teamId: ID!, seasonId: ID!): Team!
+  removeSeasonFromTeam(teamId: ID!, seasonId: ID!): Team!
+  #_____________________________________________ TEAM END ____________________________________________________________
+
+  #_____________________________________________ THEME START _________________________________________________________
+  createTheme(themeInput: ThemeInput!): Theme!
+  updateTheme(themeId: ID!, theme: ThemeInput!): Theme!
+  deleteTheme(themeId: ID!): Boolean!
+
+  setAuthorToTheme(themeId: ID!, userId: ID!): Theme!
+
+  attachMentorsToTheme(themeId: ID!, mentorIds: [ID!]!): Theme!
+  detachMentorsFromTheme(themeId: ID!, mentorIds: [ID!]!): Theme!
+
+  changeThemeState(themeId: ID!, state: ThemeState!): Theme!
+
+  addSeasonToTheme(themeId: ID!, seasonId: ID!): Theme!
+  removeSeasonFromTheme(themeId: ID!, seasonId: ID!): Theme!
+  #_____________________________________________ THEME END ___________________________________________________________
+}

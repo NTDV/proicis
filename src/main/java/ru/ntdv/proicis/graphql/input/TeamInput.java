@@ -8,8 +8,10 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class TeamInput {
-    private String title;
-    private Set<Long> participants;
-    private List<Long> preferThemes;
+public
+class TeamInput {
+private String title;
+private Set<Long> participants;
+private List<Long> preferThemes;
+private List<Long> seasons;
 }

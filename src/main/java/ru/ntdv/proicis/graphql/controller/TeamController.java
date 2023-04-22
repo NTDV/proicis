@@ -188,4 +188,18 @@ public
 Team changeTeamState(@Argument final Long teamId, @Argument final TeamState state) {
     return new Team(teamService.changeTeamState(teamId, state));
 }
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+Team addSeasonToTheme(@Argument final Long teamId, @Argument final Long seasonId) {
+    return new Team(teamService.addSeasonToTheme(teamId, seasonId));
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+Team removeSeasonFromTheme(@Argument final Long teamId, @Argument final Long seasonId) {
+    return new Team(teamService.removeSeasonFromTheme(teamId, seasonId));
+}
 }
