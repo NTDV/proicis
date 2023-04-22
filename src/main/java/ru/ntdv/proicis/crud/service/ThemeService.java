@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ntdv.proicis.constant.ThemeState;
 import ru.ntdv.proicis.crud.model.File;
+import ru.ntdv.proicis.crud.model.Season;
 import ru.ntdv.proicis.crud.model.Theme;
 import ru.ntdv.proicis.crud.model.User;
 import ru.ntdv.proicis.crud.repository.ThemeRepository;
@@ -34,8 +35,9 @@ Set<Theme> getMentorThemes(final User mentor) {
 }
 
 public
-Theme createTheme(final ThemeInput themeInput, final File file, final User author, final Set<User> mentors) {
-    return themeRepository.saveAndFlush(new Theme(themeInput, file, author, mentors));
+Theme createTheme(final ThemeInput themeInput, final File file, final User author, final Set<User> mentors,
+                  final List<Season> seasons) {
+    return themeRepository.saveAndFlush(new Theme(themeInput, file, author, mentors, seasons));
 }
 
 public

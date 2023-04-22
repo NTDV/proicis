@@ -10,8 +10,8 @@ import ru.ntdv.proicis.constant.ThemeState;
 import ru.ntdv.proicis.graphql.input.ThemeInput;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
 
 @Entity
 @Getter
@@ -43,8 +43,13 @@ private Set<User> mentors;
 
 private ThemeState state;
 
+@OneToMany(fetch = FetchType.EAGER)
+@OrderColumn(name = "activeinseasons_priority")
+private List<Season> activeInSeasons;
+
 public
-Theme(final ThemeInput themeInput, final File presentationSlide, final User author, final Set<User> mentors) {
+Theme(final ThemeInput themeInput, final File presentationSlide, final User author, final Set<User> mentors,
+      final List<Season> activeInSeasons) {
     this.title = themeInput.getTitle();
     this.description = themeInput.getDescription();
     this.presentationSlide = presentationSlide;
@@ -53,5 +58,6 @@ Theme(final ThemeInput themeInput, final File presentationSlide, final User auth
     this.author = author;
     this.mentors = mentors == null ? new HashSet<>() : mentors;
     this.state = ThemeState.Reviewing;
+    this.activeInSeasons = activeInSeasons;
 }
 }
