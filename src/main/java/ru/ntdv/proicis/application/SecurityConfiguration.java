@@ -30,6 +30,7 @@ private UserDetailsService userDetailsService;
 public
 SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
     return http
+            .cors(AbstractHttpConfigurer::disable)
             .securityMatcher("/graphql")
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))

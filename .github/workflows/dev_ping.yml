@@ -13,7 +13,7 @@ jobs:
       - name: curl actuator
         id: ping
         run: |
-          echo "::set-output name=status::http://$(curl ${{ secrets.VDS_ADDRESS }}:8080/api/actuator/health)"
+          echo "::set-output name=status::$(curl http://${{ secrets.VDS_ADDRESS }}:8080/actuator/health)"
 
       - name: health check
         run: |
