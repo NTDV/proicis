@@ -36,7 +36,11 @@ jobs:
       with:
         arguments: bootJar
     - name: Rename artifact
-      run: for f in ./build/libs/*.jar; do mv "$f" "./build/libs/proisic_dev_new.jar"
+      run: |
+        for f in ./build/libs/*.jar
+        do
+          mv "$f" "./build/libs/proisic_dev_new.jar"
+        done
     - name: Copy build via ssh
       uses: appleboy/scp-action@v0.1.4
       with:
