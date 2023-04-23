@@ -25,11 +25,10 @@ jobs:
         distribution: 'adopt'
     - name: Write secrets to application.properties
       run: |
-        tree
-        echo "spring.datasource.url=${{ secrets.SPRING_DATASOURCE_URL }}" >> proicis/src/main/resources/application.properties
-        echo "spring.datasource.username=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> proicis/src/main/resources/application.properties
-        echo "spring.datasource.password=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> proicis/src/main/resources/application.properties
-        echo "spring.jpa.hibernate.ddl-auto=${{ vars.SPRING_JPA_HIBERNATE_DDL_AUTO }}" >> proicis/src/main/resources/application.properties
+        echo "spring.datasource.url=${{ secrets.SPRING_DATASOURCE_URL }}" >> src/main/resources/application.properties
+        echo "spring.datasource.username=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> src/main/resources/application.properties
+        echo "spring.datasource.password=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> src/main/resources/application.properties
+        echo "spring.jpa.hibernate.ddl-auto=${{ vars.SPRING_JPA_HIBERNATE_DDL_AUTO }}" >> src/main/resources/application.properties
     - name: Build bootJar with Gradle
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
@@ -41,7 +40,7 @@ jobs:
         username: ${{ secrets.VDS_USER }}
         password: ${{ secrets.VDS_PASS }}
         port: 22
-        source: "proicis/build/libs/*.jar"
+        source: "build/libs/*.jar"
         target: "/root/proisic_dev/proisic_dev_new.jar"
     - name: Deploy application on remote server
       uses: appleboy/ssh-action@v0.1.10
