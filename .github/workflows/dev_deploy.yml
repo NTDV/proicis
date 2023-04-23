@@ -60,5 +60,6 @@ jobs:
         script: |
           /etc/init.d/proisic_dev stop
           rm -rf /root/proisic_dev/proisic_dev.jar
-          mv /root/proisic_dev/proisic_dev_new.jar /root/proisic_dev/proisic_dev.jar
+          mv /root/proisic_dev/build/libs/proisic_dev_new.jar /root/proisic_dev/proisic_dev.jar
+          rm -rf /root/proisic_dev/build
           /etc/init.d/proisic_dev start
