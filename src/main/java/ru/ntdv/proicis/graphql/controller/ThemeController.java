@@ -18,14 +18,12 @@ import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.Team;
 import ru.ntdv.proicis.crud.model.User;
 import ru.ntdv.proicis.crud.model.UserRole;
-import ru.ntdv.proicis.crud.service.CredentialsService;
-import ru.ntdv.proicis.crud.service.TeamService;
-import ru.ntdv.proicis.crud.service.ThemeService;
-import ru.ntdv.proicis.crud.service.UserService;
+import ru.ntdv.proicis.crud.service.*;
 import ru.ntdv.proicis.graphql.input.ThemeInput;
 import ru.ntdv.proicis.graphql.model.Theme;
 
 import java.nio.file.FileSystemException;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,6 +37,8 @@ private static final Log logger = LogFactory.getLog(ThemeController.class);
 CredentialsService credentialsService;
 @Autowired
 UserService userService;
+@Autowired
+SeasonService seasonService;
 @Autowired
 private
 ThemeService themeService;
@@ -127,9 +127,12 @@ throws AccessDeniedException, FileSystemException {
     final var file =
             storageService.save(themeInput.getPresentationSlide(), credentials.getUser(), FileAccessPolicy.Registered);
     if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator, UserRole.Role.Participant)) {
-        return new Theme(themeService.createTheme(themeInput, file, credentials.getUser(), Set.of()));
+        return new Theme(themeService.createTheme(themeInput, file, credentials.getUser(), Set.of(),
+                                                  themeInput.getSeasons().stream().map(seasonService::getSeason)
+                                                            .collect(Collectors.toList())));
     } else if (credentials.hasAnyRole(UserRole.Role.Mentor)) {
-        return new Theme(themeService.createTheme(themeInput, file, credentials.getUser(), Set.of(credentials.getUser())));
+        return new Theme(themeService.createTheme(themeInput, file, credentials.getUser(), Set.of(credentials.getUser()),
+                                                  List.of(seasonService.getLastByRegisteringSeason())));
     } else {
         final var e = new AccessDeniedException("Can not create theme by this user. Check user roles.");
         logger.error(e);

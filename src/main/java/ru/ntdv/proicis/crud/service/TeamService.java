@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import ru.ntdv.proicis.constant.TeamState;
 import ru.ntdv.proicis.crud.model.Team;
 import ru.ntdv.proicis.crud.model.User;
+import ru.ntdv.proicis.crud.repository.SeasonRepository;
 import ru.ntdv.proicis.crud.repository.TeamRepository;
 import ru.ntdv.proicis.crud.repository.ThemeRepository;
 import ru.ntdv.proicis.crud.repository.UserRepository;
@@ -24,6 +25,8 @@ private TeamRepository teamRepository;
 private ThemeRepository themeRepository;
 @Autowired
 private UserRepository userRepository;
+@Autowired
+private SeasonRepository seasonRepository;
 
 public
 Team createTeam(final TeamInput teamInput) {
@@ -32,7 +35,9 @@ Team createTeam(final TeamInput teamInput) {
                      teamInput.getParticipants().stream().map(userId -> userRepository.findById(userId).orElseThrow(
                              () -> new NoSuchElementException("No such user found."))).collect(Collectors.toSet()),
                      teamInput.getPreferThemes().stream().map(themeId -> themeRepository.findById(themeId).orElseThrow(
-                             () -> new NoSuchElementException("No such theme found."))).toList()));
+                             () -> new NoSuchElementException("No such theme found."))).toList(),
+                     teamInput.getSeasons().stream().map(seasonId -> seasonRepository.findById(seasonId).orElseThrow(
+                             () -> new NoSuchElementException("No such season found."))).toList()));
 }
 
 public
@@ -63,6 +68,8 @@ Team updateTeam(final Long teamId, final TeamInput teamInput) throws NoSuchEleme
             () -> new NoSuchElementException("No such user found."))).collect(Collectors.toSet()));
     team.setPreferThemes(teamInput.getPreferThemes().stream().map(themeId -> themeRepository.findById(themeId).orElseThrow(
             () -> new NoSuchElementException("No such theme found."))).toList());
+    team.setActiveInSeasons(teamInput.getSeasons().stream().map(seasonId -> seasonRepository.findById(seasonId).orElseThrow(
+            () -> new NoSuchElementException("No such season found."))).toList());
     return teamRepository.saveAndFlush(team);
 }
 
@@ -127,5 +134,23 @@ Team changeTeamState(final Long teamId, final TeamState state) throws NoSuchElem
 public
 List<Team> getAllTeams() {
     return teamRepository.findAll();
+}
+
+public
+Team addSeasonToTheme(final Long teamId, final Long seasonId) throws NoSuchElementException {
+    final var team = teamRepository.findById(teamId).orElseThrow(() -> new NoSuchElementException("No such team found."));
+    final var season =
+            seasonRepository.findById(seasonId).orElseThrow(() -> new NoSuchElementException("No such season found."));
+    team.getActiveInSeasons().add(season);
+    return teamRepository.saveAndFlush(team);
+}
+
+public
+Team removeSeasonFromTheme(final Long teamId, final Long seasonId) {
+    final var team = teamRepository.findById(teamId).orElseThrow(() -> new NoSuchElementException("No such team found."));
+    final var season =
+            seasonRepository.findById(seasonId).orElseThrow(() -> new NoSuchElementException("No such season found."));
+    team.getActiveInSeasons().remove(season);
+    return teamRepository.saveAndFlush(team);
 }
 }

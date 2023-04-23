@@ -32,17 +32,22 @@ private User chosenMentor;
 private Set<User> participants;
 
 @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-@OrderColumn(name = "priority")
+@OrderColumn(name = "preferthemes_priority")
 private List<Theme> preferThemes;
 
 private TeamState state;
 
+@OneToMany(fetch = FetchType.EAGER)
+@OrderColumn(name = "activeinseasons_priority")
+private List<Season> activeInSeasons;
+
 public
-Team(final String title, final Set<User> participants, final List<Theme> preferThemes) {
+Team(final String title, final Set<User> participants, final List<Theme> preferThemes, final List<Season> activeInSeasons) {
     this.title = title;
     this.preferThemes = preferThemes;
     this.participants = participants;
     this.state = TeamState.InProgress;
+    this.activeInSeasons = activeInSeasons;
 }
 
 public

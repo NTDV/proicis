@@ -15,22 +15,26 @@ import javax.management.InstanceAlreadyExistsException;
 
 @Component
 @AllArgsConstructor
-public class InitialData implements ApplicationRunner {
-    @Autowired
-    private final UserService userService;
-    @Autowired
-    private final UserRoleService userRoleService;
+public
+class InitialData implements ApplicationRunner {
+@Autowired
+private final UserService userService;
+@Autowired
+private final UserRoleService userRoleService;
 
-    public void run(final ApplicationArguments args) {
-        userRoleService.persistRoles();
+public
+void run(final ApplicationArguments args) {
+    userRoleService.persistRoles();
 
-        if (userService.findUserById((long) 1).isPresent()) return;
-        final var user = new UserInput("Danila", "Valkovets", "Igorevich", "https://vk.com/danila_valkovets", "https://t.me/danichvolk", "Б22-534", "МИФИ");
-        final var credentials = new CredentialsInput("ntdv", "qwerty123");
-        try {
-            userService.register(credentials, user, UserRole.Role.Administrator);
-        } catch (final InstanceAlreadyExistsException e) {
-            e.printStackTrace(System.err);
-        }
+    if (userService.findUserById((long) 1).isPresent()) return;
+    final var adminUser = new UserInput("Admin1", "admin2", "admin3",
+                                        "https://vk.com/test", "https://t.me/test", "Б22-001",
+                                        "МИФИ");
+    final var credentials = new CredentialsInput("Admin", "TbJDt27H@3U");
+    try {
+        userService.register(credentials, adminUser, UserRole.Role.Administrator);
+    } catch (final InstanceAlreadyExistsException e) {
+        e.printStackTrace(System.err);
     }
+}
 }

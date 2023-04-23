@@ -6,36 +6,42 @@ import ru.ntdv.proicis.buisness.model.Hardness;
 import ru.ntdv.proicis.buisness.model.Skill;
 import ru.ntdv.proicis.constant.ThemeState;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
-public class Theme {
-    private Long id;
+public
+class Theme {
+private Long id;
 
-    private String title;
-    private String description;
+private String title;
+private String description;
 
-    private FileUploadResult presentationSlide;
-    private Hardness hardness;
+private FileUploadResult presentationSlide;
+private Hardness hardness;
 
-    private Set<Skill> skills;
-    private User author;
+private Set<Skill> skills;
+private User author;
 
-    private Set<User> mentors;
+private Set<User> mentors;
 
-    private ThemeState state;
+private ThemeState state;
 
-    public Theme(final ru.ntdv.proicis.crud.model.Theme dbTheme) {
-        id = dbTheme.getId();
-        title = dbTheme.getTitle();
-        description = dbTheme.getDescription();
-        presentationSlide = new FileUploadResult(dbTheme.getPresentationSlide().getId());
-        hardness = dbTheme.getHardness();
-        skills = dbTheme.getSkills();
-        author = new User(dbTheme.getAuthor());
-        mentors = dbTheme.getMentors().stream().map(User::new).collect(Collectors.toSet());
-        state = dbTheme.getState();
-    }
+private List<Season> seasons;
+
+public
+Theme(final ru.ntdv.proicis.crud.model.Theme dbTheme) {
+    id = dbTheme.getId();
+    title = dbTheme.getTitle();
+    description = dbTheme.getDescription();
+    presentationSlide = new FileUploadResult(dbTheme.getPresentationSlide().getId());
+    hardness = dbTheme.getHardness();
+    skills = dbTheme.getSkills();
+    author = new User(dbTheme.getAuthor());
+    mentors = dbTheme.getMentors().stream().map(User::new).collect(Collectors.toSet());
+    state = dbTheme.getState();
+    seasons = dbTheme.getActiveInSeasons().stream().map(Season::new).collect(Collectors.toList());
+}
 }
