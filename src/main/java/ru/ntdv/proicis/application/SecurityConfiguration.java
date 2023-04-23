@@ -17,6 +17,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @EnableWebSecurity
 @Configuration
@@ -30,7 +32,6 @@ private UserDetailsService userDetailsService;
 public
 SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
     return http
-            .cors(AbstractHttpConfigurer::disable)
             .securityMatcher("/graphql")
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
@@ -65,6 +66,18 @@ AuthenticationEntryPoint authenticationEntryPoint() {
     BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
     entryPoint.setRealmName("api_proiics");
     return entryPoint;
+}
+
+@Bean
+public
+WebMvcConfigurer corsConfigurer() {
+    return new WebMvcConfigurer() {
+        @Override
+        public
+        void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*").maxAge(3600);
+        }
+    };
 }
 
 @Bean
