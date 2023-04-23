@@ -35,6 +35,8 @@ jobs:
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: bootJar
+    - name: Rename artifact
+      run: for f in ./build/libs/*.jar; do mv "$f" "./build/libs/proisic_dev.jar"
     - name: Copy build via ssh
       uses: appleboy/scp-action@v0.1.4
       with:
@@ -42,8 +44,8 @@ jobs:
         username: ${{ secrets.VDS_USER }}
         password: ${{ secrets.VDS_PASS }}
         port: 22
-        source: "build/libs/*.jar"
-        target: "/root/proisic_dev/proisic_dev_new.jar"
+        source: "build/libs/proisic_dev_new.jar"
+        target: "/root/proisic_dev/"
     - name: Deploy application on remote server
       uses: appleboy/ssh-action@v0.1.10
       with:
