@@ -75,7 +75,12 @@ WebMvcConfigurer corsConfigurer() {
         @Override
         public
         void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*").maxAge(3600);
+            registry.addMapping("/**")
+                    .allowedOriginPatterns("*")
+                    .allowedMethods("*")
+                    .allowedHeaders("*")
+                    .allowCredentials(true)
+                    .maxAge(3600);
         }
     };
 }
