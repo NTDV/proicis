@@ -29,7 +29,7 @@ jobs:
           echo "spring.datasource.username=${{ secrets.SPRING_DATASOURCE_USERNAME }}" >> src/main/resources/application.properties
           echo "spring.datasource.password=${{ secrets.SPRING_DATASOURCE_PASSWORD }}" >> src/main/resources/application.properties
           echo "spring.jpa.hibernate.ddl-auto=${{ vars.SPRING_JPA_HIBERNATE_DDL_AUTO }}" >> src/main/resources/application.properties
-          echo "lets-encrypt-helper.domain=${{ secrets.HOSTNAME }}" >> src/main/resources/application.properties
+          echo "lets-encrypt-helper.domain=${{ vars.HOSTNAME }}" >> src/main/resources/application.properties
           echo "server.ssl.key-store-password=${{ secrets.SERVER_SSL_KEY_STORE_PASSWORD }}" >> src/main/resources/application.properties
       - name: Grant permissions
         run: chmod +x ./gradlew
