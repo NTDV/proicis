@@ -1,8 +1,12 @@
 package ru.ntdv.proicis.application;
 
+import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
+import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -17,6 +21,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,27 +40,27 @@ public
 SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
     return http
             .cors(Customizer.withDefaults())
-            .securityMatcher("/graphql")
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/graphql").authenticated())
-            .httpBasic().authenticationEntryPoint(authenticationEntryPoint()).and()
+            .exceptionHandling()
+            .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and()
+            //.securityMatcher("/graphql")
+            //.csrf(AbstractHttpConfigurer::disable)
+            //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+            //.authorizeHttpRequests(auth -> auth.requestMatchers("/graphql").authenticated())
+            //.httpBasic().authenticationEntryPoint(authenticationEntryPoint()).and()
 
-            .securityMatcher("/files/**")
+            .securityMatcher("/files/**", "/graphql")
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**").authenticated())
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/graphql").authenticated())
             //.authenticationProvider(authProvider())
             .formLogin(form -> form
-                               .loginPage("/user_login").permitAll()
-                               .defaultSuccessUrl("/index", false).permitAll()
-                               .loginProcessingUrl("/login").permitAll()
-                               .failureUrl("/user_login").permitAll()
-                      )
+                    .loginPage("/user_login").permitAll()
+                    .defaultSuccessUrl("/index", false).permitAll()
+                    .loginProcessingUrl("/login").permitAll()
+                    .failureUrl("/user_login").permitAll())
             .logout().permitAll().and()
             .rememberMe().and()
             .csrf(AbstractHttpConfigurer::disable)
-
 
             .securityMatcher("/**")
             .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
@@ -69,6 +74,16 @@ AuthenticationEntryPoint authenticationEntryPoint() {
     BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
     entryPoint.setRealmName("api_proiics");
     return entryPoint;
+}
+
+@Bean
+public
+TomcatContextCustomizer sameSiteCookiesConfig() {
+    return context -> {
+        final Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
+        cookieProcessor.setSameSiteCookies(SameSiteCookies.NONE.getValue());
+        context.setCookieProcessor(cookieProcessor);
+    };
 }
 
 @Bean
