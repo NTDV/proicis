@@ -38,27 +38,25 @@ public
 SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
     return http
             .cors(Customizer.withDefaults())
-            .securityMatcher("/graphql")
-            .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/graphql").authenticated())
-            .httpBasic().authenticationEntryPoint(authenticationEntryPoint()).and()
+            //.securityMatcher("/graphql")
+            //.csrf(AbstractHttpConfigurer::disable)
+            //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+            //.authorizeHttpRequests(auth -> auth.requestMatchers("/graphql").authenticated())
+            //.httpBasic().authenticationEntryPoint(authenticationEntryPoint()).and()
 
-            .securityMatcher("/files/**")
+            .securityMatcher("/files/**", "/graphql")
             .csrf(AbstractHttpConfigurer::disable)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**").authenticated())
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/graphql").authenticated())
             //.authenticationProvider(authProvider())
             .formLogin(form -> form
-                               .loginPage("/user_login").permitAll()
-                               .defaultSuccessUrl("/index", false).permitAll()
-                               .loginProcessingUrl("/login").permitAll()
-                               .failureUrl("/user_login").permitAll()
-                      )
+                    .loginPage("/user_login").permitAll()
+                    .defaultSuccessUrl("/index", false).permitAll()
+                    .loginProcessingUrl("/login").permitAll()
+                    .failureUrl("/user_login").permitAll())
             .logout().permitAll().and()
             .rememberMe().and()
             .csrf(AbstractHttpConfigurer::disable)
-
 
             .securityMatcher("/**")
             .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
