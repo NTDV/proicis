@@ -1,19 +1,32 @@
 import React, { useState } from "react";
 import InputField from "../../UI/InputField";
+import axios from "axios";
 
 import logo from './../../images/logo.png';
 import './css/welcome.css';
 
-const LoginForm = () => {
+const LoginForm = (props) => {
     const [login, setLogin] = useState('');
     const [pwd, setPwd] = useState('');
 
     function logIn(e) {
         e.preventDefault();
-    }
+        axios.post(props.endpoint + "login", {
+          username: login,
+          password: pwd
+        },
+        {
+          headers: {
+            "content-type": "application/x-www-form-urlencoded",
+          },
+          withCredentials: true
+        })
+        .then((e) => {props.whoAmI()})
+        .catch((e) => {console.log(e)});
+        }
 
     return (
-        <form className="login">
+        <form className="login" onSubmit={logIn}>
             <div className="form__image">
                 <img alt="codenerve.com" src={logo} style={{width: '250px', height: '250px'}}/>
             </div>
@@ -38,7 +51,7 @@ const LoginForm = () => {
                 <span>Запомнить меня</span>
             </div>
             <div className="formField">
-                <input id='welcomeSubmit' type="submit" value="Войти" onClick={logIn}/>
+                <input id='welcomeSubmit' type="submit" value="Войти"/>
             </div>
             <p className="text--center">
                 Проектная практика <a href="https://goit.mephi.ru">ИИКС</a>
