@@ -45,9 +45,9 @@ SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and()
             .csrf(AbstractHttpConfigurer::disable)
 
-            .securityMatcher("/files/**", "/graphql", "/graphiql/**")
+            .securityMatcher("/graphql", "/graphiql/**")
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/graphql", "/graphiql/**").authenticated())
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/graphql", "/graphiql/**").authenticated())
             .formLogin(form -> form
                     .loginPage("/user_login").permitAll()
                     .loginProcessingUrl("/login").permitAll()
@@ -55,6 +55,9 @@ SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
                     .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED)))
             .logout().permitAll().and()
             .rememberMe().and()
+
+            .securityMatcher("/files/**", "/actuator/**")
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/actuator/**").permitAll())
 
             .securityMatcher("/**")
             .authorizeHttpRequests(auth -> auth.requestMatchers("/**").denyAll())
