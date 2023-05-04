@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.application;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
 import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,29 +43,21 @@ SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
             .cors(Customizer.withDefaults())
             .exceptionHandling()
             .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and()
-            //.securityMatcher("/graphql")
-            //.csrf(AbstractHttpConfigurer::disable)
-            //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            //.authorizeHttpRequests(auth -> auth.requestMatchers("/graphql").authenticated())
-            //.httpBasic().authenticationEntryPoint(authenticationEntryPoint()).and()
-
-            .securityMatcher("/files/**", "/graphql")
             .csrf(AbstractHttpConfigurer::disable)
+
+            .securityMatcher("/files/**", "/graphql", "/graphiql/**")
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/graphql").authenticated())
-            //.authenticationProvider(authProvider())
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/graphql", "/graphiql/**").authenticated())
             .formLogin(form -> form
                     .loginPage("/user_login").permitAll()
-                    .defaultSuccessUrl("/index", false).permitAll()
                     .loginProcessingUrl("/login").permitAll()
-                    .failureUrl("/user_login").permitAll())
+                    .successHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))
+                    .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED)))
             .logout().permitAll().and()
             .rememberMe().and()
-            .csrf(AbstractHttpConfigurer::disable)
 
             .securityMatcher("/**")
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
-            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/**").denyAll())
             .build();
 }
 

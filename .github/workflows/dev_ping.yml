@@ -1,9 +1,9 @@
 name: Health Check
 
-on: 
+on:
   workflow_dispatch:
   schedule:
-    - cron:  '*/5 * * * *'
+    - cron: '*/5 * * * *'
 
 jobs:
 
@@ -13,7 +13,7 @@ jobs:
       - name: curl actuator
         id: ping
         run: |
-          echo "::set-output name=status::$(curl http://${{ secrets.VDS_ADDRESS }}:8080/actuator/health)"
+          echo "::set-output name=status::$(curl https://${{ vars.HOSTNAME }}:443/actuator/health)"
 
       - name: health check
         run: |
