@@ -10,7 +10,8 @@
 }
 
 .login input{
-  background-color: #3b4148;
+  background-color: #BEE3DB;
+  border: 2px solid #aad3cB;
   border-radius: 4px;
   border-radius: 0.25rem;
   padding: 16px;
@@ -24,11 +25,11 @@
 }
 
 .login input:hover {
-  background-color: #434a52;
+  background-color: #B0d5D0;
 }
 
 .login {
-  color:#ddd;
+  color:#606468;
   max-width: 20rem;
   margin-left: auto;
   margin-right: auto;
@@ -48,7 +49,7 @@
   border-radius: 0.25rem;
   padding: 16px;
   padding: 1rem;
-  background-color: #363b41;
+  background-color: #aad3cB;
   border-bottom-right-radius: 0;
   border-top-right-radius: 0;
   padding-left: 20px;
@@ -82,12 +83,8 @@
   justify-content: center;
 }
 
-.login p {
-  color: #606468;
-}
-
 .login a {
-  color: #eee;
+  color: #000;
   outline: 0;
   text-decoration: none;
 }

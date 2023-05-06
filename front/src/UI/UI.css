@@ -3,3 +3,19 @@
     transition: 0.3s;
     color: inherit;
 }
+
+.logout{
+    display: block;
+    background-color: #fAf9f9;
+    /*border-top-left-radius: 20%;*/
+    border-radius: 40%;
+    padding: 2px 0 2px 4px;
+    margin-left: 13px;
+    cursor: pointer;
+}
+.logout:hover {
+    background-color: #ddd;
+}
+.logout:active {
+    background-color: #aaa;
+}

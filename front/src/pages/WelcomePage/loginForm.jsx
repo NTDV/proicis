@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import InputField from "../../UI/InputField";
 import axios from "axios";
 
-import logo from './../../images/logo.png';
+import logo from './../../images/logo1.png';
 import './css/welcome.css';
 
 const LoginForm = (props) => {
@@ -22,7 +22,7 @@ const LoginForm = (props) => {
           withCredentials: true
         })
         .then((e) => {props.whoAmI()})
-        .catch((e) => {console.log(e)});
+        .catch((e) => {});
         }
 
     return (

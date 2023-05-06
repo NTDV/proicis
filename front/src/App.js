@@ -4,11 +4,12 @@ import ConnectingPage from './pages/ConnectingPage/ConnectingPage';
 import ModerPage from './pages/Moderator/ModerPage';
 import './App.css'
 import axios from 'axios';
+import consts from './consts.json';
 
 function App() {
 
-  const endpoint = 'https://charityradar.online/';
-  const qlendpoint = 'https://charityradar.online/graphql';
+  const endpoint = consts.endpoint;
+  const qlendpoint = endpoint + 'graphql';
 
   function log_in(e) {
     e.preventDefault();
@@ -23,12 +24,11 @@ function App() {
       withCredentials: true
     })
     
-    .then((e) => {console.log(e)})
+    .then((e) => {console.log(e); whoAmI();})
     .catch((e) => {console.log(e)});
   }
 
   function whoAmI() {
-    
     axios.post(qlendpoint, {
       query: 
       `
@@ -93,7 +93,7 @@ function App() {
         <WelcomePage whoAmI={whoAmI} endpoint={endpoint}/> :
         <ConnectingPage/>
         ) :
-        myRole === 'Moder' ?
+        myRole === 'Administrator' ?
         <ModerPage user={user}/> :
         <h1>Nothing</h1>
       }
@@ -104,6 +104,7 @@ function App() {
       <br/>
       <button onClick={log_in}>LOGIN AS ADMIN</button>
       <button onClick={log_out}>LOGOUT</button>
+      <span>My role: {myRole}</span>
     </div>
   );
 }
