@@ -3,6 +3,7 @@ import './UI.css';
 import logoutSVG from './../images/logout.svg';
 import axios from "axios";
 import consts from './../consts.json';
+import { Link } from "react-router-dom";
 
 const logoutEl = () => {
 
@@ -19,9 +20,11 @@ const logoutEl = () => {
       }
 
     return (
-        <div className='logout' onClick={logout}>
-            <img src={logoutSVG} alt="logout" style={{height: '25px'}}/>
-        </div>
+        <Link to="/" style={{textDecoration: "none", outline: "0"}}>
+          <div className='logout' onClick={logout}>
+              <img src={logoutSVG} alt="logout" style={{height: '25px'}}/>
+          </div>
+        </Link>
     )
 };
 
