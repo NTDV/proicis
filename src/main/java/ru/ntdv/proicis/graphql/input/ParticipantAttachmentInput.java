@@ -1,4 +1,4 @@
-package ru.ntdv.proicis.graphql.model;
+package ru.ntdv.proicis.graphql.input;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public
-class ParticipantAttachment {
+class ParticipantAttachmentInput {
 private Long code;
 private String secondName;
 }

@@ -24,6 +24,7 @@ jobs:
         with:
           java-version: '19'
           distribution: 'adopt'
+          cache: 'gradle'
       - name: Write secrets to application.properties
         run: |
           echo "spring.datasource.url=${{ secrets.SPRING_DATASOURCE_URL }}" >> src/main/resources/application.properties

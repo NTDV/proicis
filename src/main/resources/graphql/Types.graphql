@@ -174,7 +174,7 @@ enum TeamState {
   End
 }
 
-type ParticipantAttachment {
+input ParticipantAttachmentInput {
   code: ID!
   secondName: String!
 }

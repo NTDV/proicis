@@ -16,8 +16,8 @@ import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.UserRole;
 import ru.ntdv.proicis.crud.service.TeamService;
 import ru.ntdv.proicis.crud.service.UserService;
+import ru.ntdv.proicis.graphql.input.ParticipantAttachmentInput;
 import ru.ntdv.proicis.graphql.input.TeamInput;
-import ru.ntdv.proicis.graphql.model.ParticipantAttachment;
 import ru.ntdv.proicis.graphql.model.Team;
 
 import java.util.Set;
@@ -121,7 +121,7 @@ throws AccessDeniedException, BadCredentialsException {
 @MutationMapping
 public
 Team addParticipantToTeam(final Authentication authentication, @Argument final Long teamId,
-                          @Argument final ParticipantAttachment participantInfo)
+                          @Argument final ParticipantAttachmentInput participantInfo)
 throws AccessDeniedException, BadCredentialsException {
     final var credentials = Credentials.from(authentication);
     if ((credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)

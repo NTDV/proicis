@@ -41,7 +41,7 @@ type Mutation {
   updateTeam(teamId: ID!, team: TeamInput!): Team!
   deleteTeam(teamId: ID!): Boolean!
 
-  attachParticipantToTeam(teamId: ID!, participantInfo: ParticipantAttachment!): Team!
+  attachParticipantToTeam(teamId: ID!, participantInfo: ParticipantAttachmentInput!): Team!
   removeParticipantFromTeam(teamId: ID!, userId: ID!): Team!
   leaveTeam(teamId: ID!): Team!
 
