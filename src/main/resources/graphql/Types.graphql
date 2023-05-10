@@ -56,8 +56,16 @@ enum UserRole {
   Participant
 }
 
+enum UserState {
+  Deleted,
+  Banned,
+  Unconfirmed,
+  Confirmed
+}
+
 type User {
   id: ID!
+  state: UserState!
 
   firstName: String!
   secondName: String!

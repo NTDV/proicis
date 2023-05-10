@@ -1,10 +1,13 @@
 package ru.ntdv.proicis.graphql.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import ru.ntdv.proicis.constant.UserState;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.UserRole;
 import ru.ntdv.proicis.crud.service.UserService;
@@ -51,28 +54,28 @@ Set<User> getAllParticipants() {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @QueryMapping
 public
-User getAdministrator(final Long userId) {
+User getAdministrator(@Argument final Long userId) {
     return new User(userService.getAdministrator(userId));
 }
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @QueryMapping
 public
-User getModerator(final Long userId) {
+User getModerator(@Argument final Long userId) {
     return new User(userService.getModerator(userId));
 }
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @QueryMapping
 public
-User getMentor(final Long userId) {
+User getMentor(@Argument final Long userId) {
     return new User(userService.getMentor(userId));
 }
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @QueryMapping
 public
-User getParticipant(final Long userId) {
+User getParticipant(@Argument final Long userId) {
     return new User(userService.getParticipant(userId));
 }
 
@@ -89,5 +92,34 @@ public
 UserRole.Role getMyRole(final Authentication authentication) throws RoleInfoNotFoundException {
     return UserRole.Role.getFrom(Credentials.from(authentication).getRoles().stream().findAny()
                                             .orElseThrow(() -> new RoleInfoNotFoundException("Role not found")));
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+User unconfirmUser(@Argument final Long userId) {
+    return new User(userService.setState(userId, UserState.Unconfirmed));
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+User confirmUser(@Argument final Long userId) {
+    return new User(userService.setState(userId, UserState.Confirmed));
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+User banUser(@Argument final Long userId) {
+    return new User(userService.setState(userId, UserState.Banned));
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+boolean deleteUser(@Argument final Long userId) {
+    new User(userService.setState(userId, UserState.Deleted));
+    return true;
 }
 }
