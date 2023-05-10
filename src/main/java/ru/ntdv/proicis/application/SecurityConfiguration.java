@@ -56,11 +56,9 @@ SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
             .logout().permitAll().and()
             .rememberMe().and()
 
-            .securityMatcher("/files/**", "/actuator/**")
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/actuator/**").permitAll())
-
             .securityMatcher("/**")
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/**").denyAll())
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/actuator/**").permitAll()
+                                               .requestMatchers("/**").denyAll())
             .build();
 }
 
