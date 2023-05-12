@@ -45,7 +45,56 @@ jobs:
           do
             mv "$f" "./build/libs/proisic_dev_new.jar"
           done
-      - name: Copy build via ssh
+
+      - name: Copy build via ssh (try 1/5)
+        id: scp1
+        uses: appleboy/scp-action@v0.1.4
+        continue-on-error: true
+        with:
+          host: ${{ secrets.VDS_ADDRESS }}
+          username: ${{ secrets.VDS_USER }}
+          password: ${{ secrets.VDS_PASS }}
+          port: 22
+          source: "build/libs/proisic_dev_new.jar"
+          target: "/root/proisic_dev/"
+      - name: Copy build via ssh (try 2/5)
+        id: scp2
+        if: steps.scp1.outcome == 'failure'
+        uses: appleboy/scp-action@v0.1.4
+        continue-on-error: true
+        with:
+          host: ${{ secrets.VDS_ADDRESS }}
+          username: ${{ secrets.VDS_USER }}
+          password: ${{ secrets.VDS_PASS }}
+          port: 22
+          source: "build/libs/proisic_dev_new.jar"
+          target: "/root/proisic_dev/"
+      - name: Copy build via ssh (try 3/5)
+        id: scp3
+        if: steps.scp2.outcome == 'failure'
+        uses: appleboy/scp-action@v0.1.4
+        continue-on-error: true
+        with:
+          host: ${{ secrets.VDS_ADDRESS }}
+          username: ${{ secrets.VDS_USER }}
+          password: ${{ secrets.VDS_PASS }}
+          port: 22
+          source: "build/libs/proisic_dev_new.jar"
+          target: "/root/proisic_dev/"
+      - name: Copy build via ssh (try 4/5)
+        id: scp4
+        if: steps.scp3.outcome == 'failure'
+        uses: appleboy/scp-action@v0.1.4
+        continue-on-error: true
+        with:
+          host: ${{ secrets.VDS_ADDRESS }}
+          username: ${{ secrets.VDS_USER }}
+          password: ${{ secrets.VDS_PASS }}
+          port: 22
+          source: "build/libs/proisic_dev_new.jar"
+          target: "/root/proisic_dev/"
+      - name: Copy build via ssh (try 5/5)
+        if: steps.scp4.outcome == 'failure'
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VDS_ADDRESS }}
@@ -54,6 +103,7 @@ jobs:
           port: 22
           source: "build/libs/proisic_dev_new.jar"
           target: "/root/proisic_dev/"
+
       - name: Deploy application on remote server
         uses: appleboy/ssh-action@v0.1.10
         with:
