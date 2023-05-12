@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.UserRole;
 import ru.ntdv.proicis.crud.service.CredentialsService;
@@ -22,6 +23,7 @@ import ru.ntdv.proicis.graphql.model.User;
 import javax.management.InstanceAlreadyExistsException;
 import javax.security.auth.login.AccountException;
 
+@Validated
 @Controller
 public
 class CredentialsController {
