@@ -43,7 +43,7 @@ public static final String THIRDNAME_PATTERN_REGEXP = "^[\\S]{" + THIRDNAME_SIZE
 public static final String THIRDNAME_PATTERN_MESSAGE = "Third name cannot contain whitespace characters.";
 public static final String THIRDNAME_NOTNULL_MESSAGE = "Third name cannot be empty.";
 
-public static final int URLVKONTAKTE_SIZE_MIN = 2;
+public static final int URLVKONTAKTE_SIZE_MIN = 0;
 public static final int URLVKONTAKTE_SIZE_MAX = 120;
 public static final String URLVKONTAKTE_SIZE_MESSAGE =
         "VKontakte url must contain at least " + URLVKONTAKTE_SIZE_MIN + " and no more than " + URLVKONTAKTE_SIZE_MAX +
