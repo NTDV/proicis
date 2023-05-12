@@ -29,7 +29,7 @@ Mono<List<GraphQLError>> resolveException(Throwable exception, final DataFetchin
     if (exception instanceof ConstraintViolationException) {
         final var joinedErrorMessage = ((ConstraintViolationException) exception).getConstraintViolations().stream()
                                                                                  .map(ConstraintViolation::getMessage)
-                                                                                 .collect(Collectors.joining(","));
+                                                                                 .collect(Collectors.joining("\n"));
 
         return Mono.fromCallable(() -> Collections.singletonList(
                 GraphqlErrorBuilder.newError(env).errorType(ErrorType.ValidationError).message(joinedErrorMessage).build()));
