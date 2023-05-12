@@ -11,6 +11,10 @@ function App() {
   const endpoint = consts.endpoint;
   const qlendpoint = endpoint + 'graphql';
 
+  const [myRole, setMyRole] = useState('None');
+  const [sentRequest, setSentRequest] = useState(0);
+  const [user, setUser] = useState({});
+
   function log_in(e) {
     e.preventDefault();
     axios.post(endpoint + "login", {
@@ -57,7 +61,6 @@ function App() {
       setSentRequest(0);
     })
     .catch((e) => {
-      console.log(e);
       setMyRole('None');
       setSentRequest(0);
     });
@@ -76,10 +79,6 @@ function App() {
     .catch((e) => {console.log(e)});
   }
 
-  const [myRole, setMyRole] = useState('None');
-  const [sentRequest, setSentRequest] = useState(0);
-  const [user, setUser] = useState({});
-
   useEffect(() => {
     setSentRequest(1);
     whoAmI();
@@ -88,11 +87,12 @@ function App() {
   return (
     <div className="App">
       {
-        myRole === 'None' ? (
-        sentRequest === 0 ?
-        <WelcomePage whoAmI={whoAmI} endpoint={endpoint}/> :
-        <ConnectingPage/>
-        ) :
+      sentRequest === 1 ?
+      <ConnectingPage/> : 
+      ""}
+      {
+        myRole === 'None' ?
+        <WelcomePage whoAmI={whoAmI} setSentRequest={setSentRequest} endpoint={endpoint}/> :
         myRole === 'Administrator' ?
         <ModerPage user={user}/> :
         <h1>Nothing</h1>

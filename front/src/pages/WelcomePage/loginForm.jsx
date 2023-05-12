@@ -10,6 +10,7 @@ const LoginForm = (props) => {
     const [pwd, setPwd] = useState('');
 
     function logIn(e) {
+        props.setSentRequest(1);
         e.preventDefault();
         axios.post(props.endpoint + "login", {
           username: login,
@@ -22,7 +23,7 @@ const LoginForm = (props) => {
           withCredentials: true
         })
         .then((e) => {props.whoAmI()})
-        .catch((e) => {});
+        .catch((e) => {props.setSentRequest(0);});
         }
 
     return (

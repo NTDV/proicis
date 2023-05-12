@@ -75,16 +75,30 @@
     right: 0;
     bottom: 0;
     display: none;
+    overflow-y: auto;
     background-color: rgba(0, 0, 0, 0.5);
 }
 .creationForm_content {
-    padding: 25px;
+    margin:auto;
+    padding: 20px;
     background-color: #f9f9f9;
-    border-radius: 10%;
+    border-radius: 10px;
     min-width: 250px;
 }
 .creationForm.active {
     display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 20px;
+}
+
+.close_button {
+    height: 1.1rem;
+    padding: 0.2rem;
+    background-color: #c66;
+    border-radius: 50%;
+}
+.close_button:hover {
+    background-color: #d55;
+}
+.close_button:active {
+    background-color: #b66;
 }
