@@ -3,6 +3,8 @@ package ru.ntdv.proicis.graphql.controller;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Validation;
+import jakarta.validation.ValidationException;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -86,6 +88,7 @@ throws CsvValidationException {
     final var owner = Credentials.from(authentication).getUser();
     final var data = new LinkedList<Triple<CredentialsInput, UserInput, UserRole.Role>>();
     final var out = new StringBuilder();
+    final var validator = Validation.buildDefaultValidatorFactory().getValidator();
 
     try (final CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
         String[] lineInArray;
@@ -103,6 +106,13 @@ throws CsvValidationException {
 
             final var credentials = new CredentialsInput(login, password);
             final var user = new UserInput(firstName, secondName, thirdName, vk, tg, group, null);
+
+            final var errors = validator.validate(user);
+            if (!errors.isEmpty()) {
+                final var exception = new ValidationException("Can not validate user input: " + errors);
+                logger.error("User input validation error", exception);
+                throw exception;
+            }
 
             out.append(login).append(",").append(password).append("\n");
             data.add(new ImmutableTriple<>(credentials, user, UserRole.Role.Participant));

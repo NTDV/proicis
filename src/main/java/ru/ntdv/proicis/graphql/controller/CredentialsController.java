@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.graphql.controller;
 
+import jakarta.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,58 +23,76 @@ import javax.management.InstanceAlreadyExistsException;
 import javax.security.auth.login.AccountException;
 
 @Controller
-public class CredentialsController {
-    private static final Log logger = LogFactory.getLog(CredentialsController.class);
-    @Autowired
-    private UserService userService;
-    @Autowired
-    private CredentialsService credentialsService;
+public
+class CredentialsController {
+private static final Log logger = LogFactory.getLog(CredentialsController.class);
+@Autowired
+private UserService userService;
+@Autowired
+private CredentialsService credentialsService;
 
-    private User register(final CredentialsInput credentialsInput, final UserInput userInput, final UserRole.Role role) throws AccountException {
-        try {
-            return new User(userService.register(credentialsInput, userInput, role).getUser());
-        } catch (final InstanceAlreadyExistsException e) {
-            logger.info(e.getMessage(), e);
-            throw new AccountException("Can not register the user.");
-        }
-    }
+@Secured({ "ROLE_Administrator" })
+@MutationMapping
+public
+User registerAdmin(@Valid @Argument final CredentialsInput credentialsInput, @Valid @Argument final UserInput userInput)
+throws AccountException {
+    return register(credentialsInput, userInput, UserRole.Role.Administrator);
+}
 
-    private Credentials checkCredentials(final CredentialsInput credentialsInput) throws UsernameNotFoundException {
-        return credentialsService.login(credentialsInput.getLogin(), credentialsInput.getPassword());
+private
+User register(final CredentialsInput credentialsInput, final UserInput userInput, final UserRole.Role role)
+throws AccountException {
+    try {
+        return new User(userService.register(credentialsInput, userInput, role).getUser());
+    } catch (final InstanceAlreadyExistsException e) {
+        logger.info(e.getMessage(), e);
+        throw new AccountException("Can not register the user.");
     }
+}
 
-    @Secured({"ROLE_Administrator"})
-    @MutationMapping
-    public User registerAdmin(@Argument final CredentialsInput credentialsInput, @Argument final UserInput userInput) throws AccountException {
-        return register(credentialsInput, userInput, UserRole.Role.Administrator);
-    }
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+User registerModerator(@Valid @Argument final CredentialsInput credentialsInput, @Valid @Argument final UserInput userInput)
+throws AccountException {
+    return register(credentialsInput, userInput, UserRole.Role.Moderator);
+}
 
-    @Secured({"ROLE_Administrator", "ROLE_Moderator"})
-    @MutationMapping
-    public User registerModerator(@Argument final CredentialsInput credentialsInput, @Argument final UserInput userInput) throws AccountException {
-        return register(credentialsInput, userInput, UserRole.Role.Moderator);
-    }
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+User registerMentor(@Valid @Argument final CredentialsInput credentialsInput, @Valid @Argument final UserInput userInput)
+throws AccountException {
+    return register(credentialsInput, userInput, UserRole.Role.Mentor);
+}
 
-    @Secured({"ROLE_Administrator", "ROLE_Moderator"})
-    @MutationMapping
-    public User registerMentor(@Argument final CredentialsInput credentialsInput, @Argument final UserInput userInput) throws AccountException {
-        return register(credentialsInput, userInput, UserRole.Role.Mentor);
-    }
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@MutationMapping
+public
+User registerParticipant(@Valid @Argument final CredentialsInput credentialsInput,
+                         @Valid @Argument final UserInput userInput) throws AccountException {
+    return register(credentialsInput, userInput, UserRole.Role.Participant);
+}
 
-    @Secured({"ROLE_Administrator", "ROLE_Moderator"})
-    @MutationMapping
-    public User registerParticipant(@Argument final CredentialsInput credentialsInput, @Argument final UserInput userInput) throws AccountException {
-        return register(credentialsInput, userInput, UserRole.Role.Participant);
+@Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
+@MutationMapping
+public
+String updateCredentials(@Valid @Argument final CredentialsInput oldCredentials,
+                         @Valid @Argument final CredentialsInput newCredentials) throws UsernameNotFoundException {
+    if (!oldCredentials.getLogin().equals(((UserDetails) SecurityContextHolder.getContext().getAuthentication()
+                                                                              .getPrincipal()).getUsername())) {
+        throw new UsernameNotFoundException("You can not change credentials of another user.");
+    } else if (oldCredentials.getLogin().equals(newCredentials.getLogin()) &&
+               oldCredentials.getPassword().equals(newCredentials.getPassword())) {
+        return oldCredentials.getLogin();
+    } else {
+        return credentialsService.update(checkCredentials(oldCredentials), newCredentials.getLogin(),
+                                         newCredentials.getPassword()).getLogin();
     }
+}
 
-    @Secured({"ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant"})
-    @MutationMapping
-    public String updateCredentials(@Argument final CredentialsInput oldCredentials, @Argument final CredentialsInput newCredentials) throws UsernameNotFoundException {
-        if (!oldCredentials.getLogin().equals(((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()))
-            throw new UsernameNotFoundException("You can not change credentials of another user.");
-        else if (oldCredentials.getLogin().equals(newCredentials.getLogin()) && oldCredentials.getPassword().equals(newCredentials.getPassword()))
-            return oldCredentials.getLogin();
-        else
-            return credentialsService.update(checkCredentials(oldCredentials), newCredentials.getLogin(), newCredentials.getPassword()).getLogin();
-    }
+private
+Credentials checkCredentials(final CredentialsInput credentialsInput) throws UsernameNotFoundException {
+    return credentialsService.login(credentialsInput.getLogin(), credentialsInput.getPassword());
+}
 }
