@@ -36,7 +36,7 @@ private CredentialsService credentialsService;
 @Secured({ "ROLE_Administrator" })
 @MutationMapping
 public
-User registerAdmin(@Valid @Argument final CredentialsInput credentialsInput, @Valid @Argument final UserInput userInput)
+User registerAdmin(@Argument @Valid final CredentialsInput credentialsInput, @Argument @Valid final UserInput userInput)
 throws AccountException {
     return register(credentialsInput, userInput, UserRole.Role.Administrator);
 }
@@ -55,7 +55,7 @@ throws AccountException {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
 public
-User registerModerator(@Valid @Argument final CredentialsInput credentialsInput, @Valid @Argument final UserInput userInput)
+User registerModerator(@Argument @Valid final CredentialsInput credentialsInput, @Argument @Valid final UserInput userInput)
 throws AccountException {
     return register(credentialsInput, userInput, UserRole.Role.Moderator);
 }
@@ -63,7 +63,7 @@ throws AccountException {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
 public
-User registerMentor(@Valid @Argument final CredentialsInput credentialsInput, @Valid @Argument final UserInput userInput)
+User registerMentor(@Argument @Valid final CredentialsInput credentialsInput, @Argument @Valid final UserInput userInput)
 throws AccountException {
     return register(credentialsInput, userInput, UserRole.Role.Mentor);
 }
@@ -71,16 +71,16 @@ throws AccountException {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
 public
-User registerParticipant(@Valid @Argument final CredentialsInput credentialsInput,
-                         @Valid @Argument final UserInput userInput) throws AccountException {
+User registerParticipant(@Argument @Valid final CredentialsInput credentialsInput,
+                         @Argument @Valid final UserInput userInput) throws AccountException {
     return register(credentialsInput, userInput, UserRole.Role.Participant);
 }
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @MutationMapping
 public
-String updateCredentials(@Valid @Argument final CredentialsInput oldCredentials,
-                         @Valid @Argument final CredentialsInput newCredentials) throws UsernameNotFoundException {
+String updateCredentials(@Argument @Valid final CredentialsInput oldCredentials,
+                         @Argument @Valid final CredentialsInput newCredentials) throws UsernameNotFoundException {
     if (!oldCredentials.getLogin().equals(((UserDetails) SecurityContextHolder.getContext().getAuthentication()
                                                                               .getPrincipal()).getUsername())) {
         throw new UsernameNotFoundException("You can not change credentials of another user.");

@@ -46,14 +46,14 @@ jobs:
             mv "$f" "./build/libs/proisic_dev_new.jar"
           done
       - name: Copy build via ssh
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.VDS_ADDRESS }}
-          user: ${{ secrets.VDS_USER }}
-          pass: ${{ secrets.VDS_PASS }}
+          username: ${{ secrets.VDS_USER }}
+          password: ${{ secrets.VDS_PASS }}
           port: 22
-          scp: |
-            "./build/libs/proisic_dev_new.jar" => "/root/proisic_dev/"
+          source: "build/libs/proisic_dev_new.jar"
+          target: "/root/proisic_dev/"
       - name: Deploy application on remote server
         uses: appleboy/ssh-action@v0.1.10
         with:
@@ -64,5 +64,6 @@ jobs:
           script: |
             /etc/init.d/proisic_dev stop
             rm -rf /root/proisic_dev/proisic_dev.jar
-            mv /root/proisic_dev/proisic_dev_new.jar /root/proisic_dev/proisic_dev.jar
+            mv /root/proisic_dev/build/libs/proisic_dev_new.jar /root/proisic_dev/proisic_dev.jar
+            rm -rf /root/proisic_dev/build
             /etc/init.d/proisic_dev start
