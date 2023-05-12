@@ -1,10 +1,10 @@
 type Mutation {
-  #_____________________________________________ STAGEINFO START _________________________________________________________
+  #_____________________________________________ STAGEINFO START _______________________________________________________
   updateStageInfo(stageInfoId: ID!, stageInfoInput: StageInfoInput!): StageInfo! # todo: unimplemented
   deleteStageInfo(stageInfoId: ID!): Boolean! # todo: unimplemented
-  #_____________________________________________ STAGEINFO END ___________________________________________________________
+  #_____________________________________________ STAGEINFO END _________________________________________________________
 
-  #_____________________________________________ SEASON START ____________________________________________________________
+  #_____________________________________________ SEASON START __________________________________________________________
   createSeason(seasonInput: SeasonInput!): Season!
   updateSeason(seasonId: ID!, seasonInput: SeasonInput!): Season!
   deleteSeason(seasonId: ID!): Boolean!
@@ -12,30 +12,38 @@ type Mutation {
   addStageInfoToSeason(seasonId: ID!, stageInfoInput: StageInfoInput!): Season!
   addCreatedStageInfoToSeason(seasonId: ID!, stageInfoId: ID!): Season!
   removeStageInfoFromSeason(seasonId: ID!, stageInfoId: ID!): Season!
-  #_____________________________________________ SEASON END ______________________________________________________________
+  #_____________________________________________ SEASON END ____________________________________________________________
 
-  #_____________________________________________ CREDENTIALS START ___________________________________________________
+  #_____________________________________________ USER START ____________________________________________________________
+  unconfirmUser(userId: ID!): User!
+  confirmUser(userId: ID!): User!
+  banUser(userId: ID!): User!
+  deleteUser(userId: ID!): Boolean!
+  #_____________________________________________ USER END ______________________________________________________________
+
+  #_____________________________________________ CREDENTIALS START _____________________________________________________
   registerAdmin(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
   registerModerator(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
   registerMentor(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
   registerParticipant(credentialsInput: CredentialsInput!, userInput: UserInput!) : User!
 
   updateCredentials(oldCredentials: CredentialsInput!, newCredentials: CredentialsInput!): String!
-  #_____________________________________________ CREDENTIALS END _____________________________________________________
+  #_____________________________________________ CREDENTIALS END _______________________________________________________
 
-  #_____________________________________________ FILE START __________________________________________________________
+  #_____________________________________________ FILE START ____________________________________________________________
   uploadFile(file: Upload!, policy: [FileAccessPolicy!]!): FileUploadResult!
 
   importParticipants(file: Upload!): FileUploadResult!
-  #_____________________________________________ FILE END ____________________________________________________________
+  #_____________________________________________ FILE END ______________________________________________________________
 
-  #_____________________________________________ TEAM START __________________________________________________________
+  #_____________________________________________ TEAM START ____________________________________________________________
   createTeam(teamInput: TeamInput!): Team!
   updateTeam(teamId: ID!, team: TeamInput!): Team!
   deleteTeam(teamId: ID!): Boolean!
 
-  addParticipantToTeam(teamId: ID!, userId: ID!): Team!
+  attachParticipantToTeam(teamId: ID!, participantInfo: ParticipantAttachmentInput!): Team!
   removeParticipantFromTeam(teamId: ID!, userId: ID!): Team!
+  leaveTeam(teamId: ID!): Team!
 
   setMentor(teamId: ID!, userId: ID!): Team!
   removeMentor(teamId: ID!): Team!
@@ -47,9 +55,9 @@ type Mutation {
 
   addSeasonToTeam(teamId: ID!, seasonId: ID!): Team!
   removeSeasonFromTeam(teamId: ID!, seasonId: ID!): Team!
-  #_____________________________________________ TEAM END ____________________________________________________________
+  #_____________________________________________ TEAM END ______________________________________________________________
 
-  #_____________________________________________ THEME START _________________________________________________________
+  #_____________________________________________ THEME START ___________________________________________________________
   createTheme(themeInput: ThemeInput!): Theme!
   updateTheme(themeId: ID!, theme: ThemeInput!): Theme!
   deleteTheme(themeId: ID!): Boolean!
@@ -63,5 +71,5 @@ type Mutation {
 
   addSeasonToTheme(themeId: ID!, seasonId: ID!): Theme!
   removeSeasonFromTheme(themeId: ID!, seasonId: ID!): Theme!
-  #_____________________________________________ THEME END ___________________________________________________________
+  #_____________________________________________ THEME END _____________________________________________________________
 }

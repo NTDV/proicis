@@ -11,6 +11,7 @@ import ru.ntdv.proicis.crud.repository.ThemeRepository;
 import ru.ntdv.proicis.crud.repository.UserRepository;
 import ru.ntdv.proicis.graphql.input.TeamInput;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
@@ -27,6 +28,12 @@ private ThemeRepository themeRepository;
 private UserRepository userRepository;
 @Autowired
 private SeasonRepository seasonRepository;
+
+public
+Team createTeamWithoutParticipants(final TeamInput teamInput) {
+    return createTeam(new TeamInput(teamInput.getTitle(), Collections.emptySet(), teamInput.getPreferThemes(),
+                                    teamInput.getSeasons()));
+}
 
 public
 Team createTeam(final TeamInput teamInput) {
@@ -58,6 +65,12 @@ Set<Team> getMentorTeams(final User mentor) {
 public
 Team getTeam(final Long teamId) throws NoSuchElementException {
     return teamRepository.findById(teamId).orElseThrow(() -> new NoSuchElementException("No such team found."));
+}
+
+public
+Team updateTeamWithoutParticipants(final Long teamId, final TeamInput teamInput) throws NoSuchElementException {
+    return updateTeam(teamId, new TeamInput(teamInput.getTitle(), Collections.emptySet(), teamInput.getPreferThemes(),
+                                            teamInput.getSeasons()));
 }
 
 public
@@ -151,6 +164,17 @@ Team removeSeasonFromTheme(final Long teamId, final Long seasonId) {
     final var season =
             seasonRepository.findById(seasonId).orElseThrow(() -> new NoSuchElementException("No such season found."));
     team.getActiveInSeasons().remove(season);
+    return teamRepository.saveAndFlush(team);
+}
+
+public
+Team leaveTeam(final Team team, final User user) {
+    try {
+        team.getParticipants().remove(user);
+    } catch (final UnsupportedOperationException unsupportedOperationException) {
+        team.setParticipants(
+                team.getParticipants().stream().filter(participant -> !participant.equals(user)).collect(Collectors.toSet()));
+    }
     return teamRepository.saveAndFlush(team);
 }
 }

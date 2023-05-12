@@ -15,6 +15,8 @@ import ru.ntdv.proicis.constant.TeamState;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.UserRole;
 import ru.ntdv.proicis.crud.service.TeamService;
+import ru.ntdv.proicis.crud.service.UserService;
+import ru.ntdv.proicis.graphql.input.ParticipantAttachmentInput;
 import ru.ntdv.proicis.graphql.input.TeamInput;
 import ru.ntdv.proicis.graphql.model.Team;
 
@@ -28,6 +30,8 @@ class TeamController {
 private static final Log logger = LogFactory.getLog(TeamController.class);
 @Autowired
 private TeamService teamService;
+@Autowired
+private UserService userService;
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @QueryMapping
@@ -72,9 +76,10 @@ public
 Team createTeam(Authentication authentication, @Argument final TeamInput teamInput)
 throws AccessDeniedException, BadCredentialsException {
     final var credentials = Credentials.from(authentication);
-    if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator) ||
-        !teamService.doesParticipantHasTeam(credentials.getUser())) {
+    if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)) {
         return new Team(teamService.createTeam(teamInput));
+    } else if (!teamService.doesParticipantHasTeam(credentials.getUser())) {
+        return new Team(teamService.createTeamWithoutParticipants(teamInput));
     } else {
         throw new AccessDeniedException("Can not create team because participant already has one");
     }
@@ -86,9 +91,10 @@ public
 Team updateTeam(Authentication authentication, @Argument final Long teamId, @Argument final TeamInput teamInput)
 throws AccessDeniedException, BadCredentialsException {
     final var credentials = Credentials.from(authentication);
-    if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator) ||
-        teamService.getTeam(teamId).isParticipant(credentials.getUser())) {
+    if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)) {
         return new Team(teamService.updateTeam(teamId, teamInput));
+    } else if (teamService.getTeam(teamId).isParticipant(credentials.getUser())) {
+        return new Team(teamService.updateTeamWithoutParticipants(teamId, teamInput));
     } else {
         throw new AccessDeniedException("Access denied");
     }
@@ -114,12 +120,15 @@ throws AccessDeniedException, BadCredentialsException {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Participant" })
 @MutationMapping
 public
-Team addParticipantToTeam(final Authentication authentication, @Argument final Long teamId, @Argument final Long userId)
+Team addParticipantToTeam(final Authentication authentication, @Argument final Long teamId,
+                          @Argument final ParticipantAttachmentInput participantInfo)
 throws AccessDeniedException, BadCredentialsException {
     final var credentials = Credentials.from(authentication);
-    if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator) ||
-        teamService.getTeam(teamId).isParticipant(credentials.getUser())) {
-        return new Team(teamService.addParticipantToTeam(teamId, userId));
+    if ((credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)
+         || teamService.getTeam(teamId).isParticipant(credentials.getUser())
+        ) && userService.findUserById(participantInfo.getCode()).orElseThrow().getSecondName()
+                        .equals(participantInfo.getSecondName())) {
+        return new Team(teamService.addParticipantToTeam(teamId, participantInfo.getCode()));
     } else {
         throw new AccessDeniedException("Access denied");
     }
@@ -135,6 +144,23 @@ Team removeParticipantFromTeam(final Authentication authentication, @Argument fi
         (teamService.getTeam(teamId).isParticipant(credentials.getUser()) &&
          credentials.getUser().getId().equals(userId))) {
         return new Team(teamService.removeParticipantFromTeam(teamId, userId));
+    } else {
+        throw new AccessDeniedException("Access denied");
+    }
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Participant" })
+@MutationMapping
+public
+Team leaveTeam(final Authentication authentication, @Argument final Long teamId) {
+    final var credentials = Credentials.from(authentication);
+    final var team = teamService.getTeam(teamId);
+    if (team == null) {
+        throw new IllegalArgumentException("Team with id " + teamId + " not found");
+    }
+    if (credentials.hasAnyRole(UserRole.Role.Administrator) ||
+        team.isParticipant(credentials.getUser())) { // todo Add check for Registering state
+        return new Team(teamService.leaveTeam(team, credentials.getUser()));
     } else {
         throw new AccessDeniedException("Access denied");
     }

@@ -1,10 +1,11 @@
 name: Java CI dev with Gradle
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "dev" ]
+    branches: [ "main", "dev", "back" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "main", "dev", "back" ]
 
 permissions:
   contents: read
@@ -17,12 +18,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: dev
+          ref: ${{ github.ref }}
       - name: Set up JDK 19
         uses: actions/setup-java@v3
         with:
           java-version: '19'
           distribution: 'adopt'
+          cache: 'gradle'
       - name: Write secrets to application.properties
         run: |
           echo "spring.datasource.url=${{ secrets.SPRING_DATASOURCE_URL }}" >> src/main/resources/application.properties
@@ -45,7 +47,7 @@ jobs:
           done
       - name: Copy build via ssh
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
-        with: 
+        with:
           host: ${{ secrets.VDS_ADDRESS }}
           user: ${{ secrets.VDS_USER }}
           pass: ${{ secrets.VDS_PASS }}

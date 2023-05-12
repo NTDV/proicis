@@ -56,8 +56,16 @@ enum UserRole {
   Participant
 }
 
+enum UserState {
+  Deleted,
+  Banned,
+  Unconfirmed,
+  Confirmed
+}
+
 type User {
   id: ID!
+  state: UserState!
 
   firstName: String!
   secondName: String!
@@ -164,6 +172,11 @@ enum TeamState {
   InProgress,
   Approved,
   End
+}
+
+input ParticipantAttachmentInput {
+  code: ID!
+  secondName: String!
 }
 
 type Team {
