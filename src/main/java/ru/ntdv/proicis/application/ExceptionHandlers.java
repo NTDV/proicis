@@ -22,7 +22,6 @@ class ExceptionHandlers implements DataFetcherExceptionResolver {
 @Override
 public
 Mono<List<GraphQLError>> resolveException(Throwable exception, final DataFetchingEnvironment env) {
-
     log.debug("Exception name: {}", exception.getClass().getName());
     log.debug("Exception message: {}", exception.getMessage());
 
