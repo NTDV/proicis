@@ -4,19 +4,23 @@ import logoutSVG from './../images/logout.svg';
 import axios from "axios";
 import consts from './../consts.json';
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
 
-const logoutEl = () => {
+const LogoutEl = () => {
+
+    const reduxDispatch = useDispatch();
 
     function logout() {
-        axios.post(consts.endpoint + "logout", { },
-        {
-          headers: {
-            "content-type": "application/x-www-form-urlencoded"
-          },
-          withCredentials: true
-        })
-        .then((e) => {window.location.reload();})
-        .catch((e) => {console.log(e)});
+      reduxDispatch({type: "server/waiting"});
+      axios.post(consts.endpoint + "logout", { },
+      {
+        headers: {
+          "content-type": "application/x-www-form-urlencoded"
+        },
+        withCredentials: true
+      })
+      .then((e) => {window.location.reload();})
+      .catch((e) => {console.log(e)});
       }
 
     return (
@@ -28,4 +32,4 @@ const logoutEl = () => {
     )
 };
 
-export default logoutEl;
+export default LogoutEl;

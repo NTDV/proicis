@@ -4,14 +4,17 @@ import axios from "axios";
 
 import logo from './../../images/logo1.png';
 import './css/welcome.css';
+import { useDispatch } from "react-redux";
 
 const LoginForm = (props) => {
     const [login, setLogin] = useState('');
     const [pwd, setPwd] = useState('');
 
+    const reduxDispatch = useDispatch();
+
     function logIn(e) {
-        props.setSentRequest(1);
         e.preventDefault();
+        reduxDispatch({type: "server/waiting"});
         axios.post(props.endpoint + "login", {
           username: login,
           password: pwd
@@ -23,7 +26,7 @@ const LoginForm = (props) => {
           withCredentials: true
         })
         .then((e) => {props.whoAmI()})
-        .catch((e) => {props.setSentRequest(0);});
+        .catch((e) => {reduxDispatch({type: "server/gotResponse"});});
         }
 
     return (

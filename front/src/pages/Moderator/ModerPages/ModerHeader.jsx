@@ -16,7 +16,7 @@ const ModerHeader = (props) => {
             <div className="HeadeControls">
                 <MenuEl callbackf={headerToggle} toggle_disabled={props.toggle_disabled}/>
                 <div className="leavebtns">
-                    <span>{props.user.firstName} {props.user.secondName[0]}. {props.user.thirdName[0]}.</span>
+                    <span>{props.user.secondName} {props.user.firstName[0]}. {props.user.thirdName[0]}.</span>
                     <LogoutEl/>
                 </div>
             </div>

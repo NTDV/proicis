@@ -5,6 +5,9 @@ import ModerPage from './pages/Moderator/ModerPage';
 import './App.css'
 import axios from 'axios';
 import consts from './consts.json';
+import { useDispatch, useSelector } from 'react-redux';
+import SuccessPage from './pages/SuccessErorrPages/SuccessPage';
+import ErrorPage from './pages/SuccessErorrPages/ErrorPage';
 
 function App() {
 
@@ -12,11 +15,15 @@ function App() {
   const qlendpoint = endpoint + 'graphql';
 
   const [myRole, setMyRole] = useState('None');
-  const [sentRequest, setSentRequest] = useState(0);
   const [user, setUser] = useState({});
+  const sentRequest = useSelector(state => state.waitingForServer);
+  const showSuccess = useSelector(state => state.showingSuccessful);
+  const error = useSelector(state => state.error);
+  const reduxDispatch = useDispatch();
 
   function log_in(e) {
     e.preventDefault();
+    reduxDispatch({type: "server/waiting"})
     axios.post(endpoint + "login", {
       username: 'Admin',
       password: 'TbJDt27H@3U'
@@ -28,8 +35,8 @@ function App() {
       withCredentials: true
     })
     
-    .then((e) => {console.log(e); whoAmI();})
-    .catch((e) => {console.log(e)});
+    .then((e) => { whoAmI();})
+    .catch((e) => {});
   }
 
   function whoAmI() {
@@ -58,11 +65,11 @@ function App() {
     .then((e) => {
       setMyRole(e.data.data.getMyRole);
       setUser(e.data.data.getMe);
-      setSentRequest(0);
+      reduxDispatch({type: "server/gotResponse"})
     })
     .catch((e) => {
       setMyRole('None');
-      setSentRequest(0);
+      reduxDispatch({type: "server/gotResponse"});
     });
   }
   
@@ -80,19 +87,30 @@ function App() {
   }
 
   useEffect(() => {
-    setSentRequest(1);
+    reduxDispatch({type: "server/waiting"})
     whoAmI();
   }, []);
 
   return (
     <div className="App">
       {
+      error.length !== 0 ?
+      <ErrorPage/> : 
+      ""
+      }
+      {
+      showSuccess === 1 ?
+      <SuccessPage/> : 
+      ""
+      }
+      {
       sentRequest === 1 ?
       <ConnectingPage/> : 
-      ""}
+      ""
+      }
       {
         myRole === 'None' ?
-        <WelcomePage whoAmI={whoAmI} setSentRequest={setSentRequest} endpoint={endpoint}/> :
+        <WelcomePage whoAmI={whoAmI} endpoint={endpoint}/> :
         myRole === 'Administrator' ?
         <ModerPage user={user}/> :
         <h1>Nothing</h1>

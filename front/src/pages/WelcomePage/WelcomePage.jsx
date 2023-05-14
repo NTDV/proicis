@@ -5,7 +5,7 @@ import './css/welcome.css';
 const WelcomePage = (props) => {
     return (
         <div className="login_container">
-            <LoginForm whoAmI={props.whoAmI} endpoint={props.endpoint} setSentRequest={props.setSentRequest}/>
+            <LoginForm whoAmI={props.whoAmI} endpoint={props.endpoint}/>
         </div>
     )
 };
