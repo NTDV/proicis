@@ -105,7 +105,7 @@ throws CsvValidationException {
             final String password = PasswordManager.generateRandomPassword();
 
             final var credentials = new CredentialsInput(login, password);
-            final var user = new UserInput(firstName, secondName, thirdName, vk, tg, group, null);
+            final var user = new UserInput(firstName, secondName, thirdName, vk, tg, group, "");
 
             final var errors = validator.validate(user);
             if (!errors.isEmpty()) {
