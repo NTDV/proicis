@@ -26,6 +26,7 @@ jobs:
           ref: ${{ github.ref }}
       - name: Build React app
         run: |
+          sed '3 i   "homepage": "https://ntdv.github.io/proicis",' package.json
           cd front
           unset CI
           npm ci
