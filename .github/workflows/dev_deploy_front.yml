@@ -27,7 +27,6 @@ jobs:
       - name: Build React app
         run: |
           cd front
-          sed '3 i   "homepage": "https://ntdv.github.io/proicis",' package.json
           unset CI
           npm ci
           npm run build
