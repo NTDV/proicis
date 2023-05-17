@@ -11,6 +11,11 @@ permissions:
   deployments: write
   pages: write
   contents: read
+  id-token: write
+  
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -22,10 +27,14 @@ jobs:
       - name: Build React app
         run: |
           cd front
+          unset CI
           npm ci
+          npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
       - name: Upload
-        uses: actions/upload-pages-artifact@v1.0.4
+        uses: actions/upload-pages-artifact@v1.0.8
         with: 
-          path: build
+          path: ./front/build
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v2
