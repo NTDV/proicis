@@ -1,8 +1,13 @@
 package ru.ntdv.proicis.application;
 
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.tomcat.util.http.Rfc6265CookieProcessor;
+import org.apache.tomcat.util.http.SameSiteCookies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.embedded.tomcat.TomcatContextCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
@@ -17,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -35,31 +41,24 @@ public
 SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
     return http
             .cors(Customizer.withDefaults())
-            .securityMatcher("/graphql")
+            .exceptionHandling()
+            .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)).and()
             .csrf(AbstractHttpConfigurer::disable)
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/graphql").authenticated())
-            .httpBasic().authenticationEntryPoint(authenticationEntryPoint()).and()
 
-            .securityMatcher("/files/**")
-            .csrf(AbstractHttpConfigurer::disable)
+            .securityMatcher("/graphql", "/graphiql/**")
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**").authenticated())
-            //.authenticationProvider(authProvider())
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/graphql", "/graphiql/**").authenticated())
             .formLogin(form -> form
-                               .loginPage("/user_login").permitAll()
-                               .defaultSuccessUrl("/index", false).permitAll()
-                               .loginProcessingUrl("/login").permitAll()
-                               .failureUrl("/user_login").permitAll()
-                      )
+                    .loginPage("/user_login").permitAll()
+                    .loginProcessingUrl("/login").permitAll()
+                    .successHandler((request, response, authentication) -> response.setStatus(HttpServletResponse.SC_OK))
+                    .failureHandler((request, response, exception) -> response.setStatus(HttpServletResponse.SC_UNAUTHORIZED)))
             .logout().permitAll().and()
             .rememberMe().and()
-            .csrf(AbstractHttpConfigurer::disable)
-
 
             .securityMatcher("/**")
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
-            .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/actuator/**", "/.well-known/**").permitAll()
+                                               .requestMatchers("/**").denyAll())
             .build();
 }
 
@@ -69,6 +68,16 @@ AuthenticationEntryPoint authenticationEntryPoint() {
     BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
     entryPoint.setRealmName("api_proiics");
     return entryPoint;
+}
+
+@Bean
+public
+TomcatContextCustomizer sameSiteCookiesConfig() {
+    return context -> {
+        final Rfc6265CookieProcessor cookieProcessor = new Rfc6265CookieProcessor();
+        cookieProcessor.setSameSiteCookies(SameSiteCookies.NONE.getValue());
+        context.setCookieProcessor(cookieProcessor);
+    };
 }
 
 @Bean

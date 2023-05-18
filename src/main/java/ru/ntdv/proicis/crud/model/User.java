@@ -18,7 +18,8 @@ import ru.ntdv.proicis.graphql.input.UserInput;
 public
 class User {
 @Id
-@GeneratedValue(strategy = GenerationType.IDENTITY)
+@SequenceGenerator(name = "user_seq", sequenceName = "user_sequence", initialValue = 1111, allocationSize = 1)
+@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq")
 private Long id;
 private UserState state;
 private String firstName;

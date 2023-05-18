@@ -5,6 +5,7 @@ import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.ntdv.proicis.constant.UserState;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.User;
 import ru.ntdv.proicis.crud.model.UserRole;
@@ -26,11 +27,6 @@ private CredentialsRepository credentialsRepository;
 private UserRepository userRepository;
 @Autowired
 private PasswordEncoder passwordEncoder;
-
-public
-Optional<User> findUserById(final Long userId) {
-    return userRepository.findById(userId);
-}
 
 public
 User getUserById(Long userId) throws EntityNotFoundException {
@@ -112,5 +108,17 @@ public
 User getParticipant(final Long userId) {
     return credentialsRepository.findFirstByUserIdAndRolesContains(userId, UserRole.Role.Participant.getUserRole())
                                 .getUser();
+}
+
+public
+User setState(final Long userId, final UserState state) {
+    final var user = findUserById(userId).orElseThrow(() -> new EntityNotFoundException("User not found."));
+    user.setState(state);
+    return userRepository.saveAndFlush(user);
+}
+
+public
+Optional<User> findUserById(final Long userId) {
+    return userRepository.findById(userId);
 }
 }
