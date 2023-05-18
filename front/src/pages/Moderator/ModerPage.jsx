@@ -10,8 +10,8 @@ const ModerPage = (props) => {
         <div className="moder">
             <BrowserRouter>
                 <Routes>
-                    <Route exact path="/" element={<ModerMain user={props.user}/>} />
-                    <Route exact path="/participants" element={<ModerParticipants user={props.user}/>} />
+                    <Route path="/" element={<ModerMain user={props.user}/>} />
+                    <Route path="/participants" element={<ModerParticipants user={props.user}/>} />
                 </Routes>
             </BrowserRouter>
         </div>

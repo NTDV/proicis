@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SuccessPage from './pages/SuccessErorrPages/SuccessPage';
 import ErrorPage from './pages/SuccessErorrPages/ErrorPage';
 import AdminPage from './pages/AdminPage/AdminPage';
+import ParticipantPage from './pages/Participant/ParticipantPage';
 
 function App() {
 
@@ -53,6 +54,7 @@ function App() {
           firstName
           secondName
           thirdName
+          state
         }
       }
       `
@@ -113,6 +115,8 @@ function App() {
       {
         myRole === 'None' ?
         <WelcomePage whoAmI={whoAmI} endpoint={endpoint}/> :
+        myRole === 'Participant' ?
+        <ParticipantPage user={user}/> : 
         myRole === 'Moderator' ?
         <ModerPage user={user}/> :
         myRole === 'Administrator' ?

@@ -11,7 +11,7 @@
 .moder header .headerNavigation {
     padding: 0 0 1rem 0;
 }
-.moder header .HeadeControls {
+.moder header .HeaderControls {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
