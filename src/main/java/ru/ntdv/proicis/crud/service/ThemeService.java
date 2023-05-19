@@ -3,10 +3,10 @@ package ru.ntdv.proicis.crud.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.ntdv.proicis.constant.ThemeState;
-import ru.ntdv.proicis.crud.model.File;
 import ru.ntdv.proicis.crud.model.Season;
 import ru.ntdv.proicis.crud.model.Theme;
 import ru.ntdv.proicis.crud.model.User;
+import ru.ntdv.proicis.crud.repository.FileRepository;
 import ru.ntdv.proicis.crud.repository.ThemeRepository;
 import ru.ntdv.proicis.graphql.input.ThemeInput;
 
@@ -20,6 +20,8 @@ class ThemeService {
 
 @Autowired
 private ThemeRepository themeRepository;
+@Autowired
+private FileRepository fileRepository;
 
 @Autowired
 private UserService userService;
@@ -35,17 +37,18 @@ Set<Theme> getMentorThemes(final User mentor) {
 }
 
 public
-Theme createTheme(final ThemeInput themeInput, final File file, final User author, final Set<User> mentors,
-                  final List<Season> seasons) {
-    return themeRepository.saveAndFlush(new Theme(themeInput, file, author, mentors, seasons));
+Theme createTheme(final ThemeInput themeInput, final User author, final Set<User> mentors, final List<Season> seasons) {
+    return themeRepository.saveAndFlush(new Theme(themeInput,
+                                                  fileRepository.getReferenceById(themeInput.getPresentationSlide()), author,
+                                                  mentors, seasons));
 }
 
 public
-Theme updateTheme(final Long themeId, final ThemeInput themeInput, final File file, final User author) {
+Theme updateTheme(final Long themeId, final ThemeInput themeInput, final User author) {
     final Theme theme = getTheme(themeId);
     theme.setTitle(themeInput.getTitle());
     theme.setDescription(themeInput.getDescription());
-    theme.setPresentationSlide(file);
+    theme.setPresentationSlide(fileRepository.getReferenceById(themeInput.getPresentationSlide()));
     theme.setHardness(themeInput.getHardness());
     theme.setSkills(themeInput.getSkills());
     theme.setAuthor(author);

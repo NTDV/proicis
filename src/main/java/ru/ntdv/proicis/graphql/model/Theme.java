@@ -8,6 +8,7 @@ import ru.ntdv.proicis.constant.ThemeState;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Data
@@ -19,7 +20,7 @@ private Long id;
 private String title;
 private String description;
 
-private FileUploadResult presentationSlide;
+private UUID presentationSlide;
 private Hardness hardness;
 
 private Set<Skill> skills;
@@ -36,7 +37,7 @@ Theme(final ru.ntdv.proicis.crud.model.Theme dbTheme) {
     id = dbTheme.getId();
     title = dbTheme.getTitle();
     description = dbTheme.getDescription();
-    presentationSlide = new FileUploadResult(dbTheme.getPresentationSlide().getId());
+    presentationSlide = dbTheme.getPresentationSlide().getId();
     hardness = dbTheme.getHardness();
     skills = dbTheme.getSkills();
     author = new User(dbTheme.getAuthor());

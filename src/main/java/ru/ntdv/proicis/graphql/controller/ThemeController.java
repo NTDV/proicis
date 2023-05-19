@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.graphql.controller;
 
+import jakarta.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import ru.ntdv.proicis.buisness.service.StorageService;
 import ru.ntdv.proicis.constant.ThemeState;
-import ru.ntdv.proicis.crud.contract.FileAccessPolicy;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.Team;
 import ru.ntdv.proicis.crud.model.User;
@@ -45,9 +44,6 @@ ThemeService themeService;
 @Autowired
 private
 TeamService teamService;
-@Autowired
-private
-StorageService storageService;
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @QueryMapping
@@ -121,17 +117,15 @@ Set<Theme> getUserThemes(@Argument final Long userId) {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @MutationMapping
 public
-Theme createTheme(final Authentication authentication, @Argument final ThemeInput themeInput)
+Theme createTheme(final Authentication authentication, @Argument @Valid final ThemeInput themeInput)
 throws AccessDeniedException, FileSystemException {
     final var credentials = Credentials.from(authentication);
-    final var file =
-            storageService.save(themeInput.getPresentationSlide(), credentials.getUser(), FileAccessPolicy.Registered);
     if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator, UserRole.Role.Participant)) {
-        return new Theme(themeService.createTheme(themeInput, file, credentials.getUser(), Set.of(),
+        return new Theme(themeService.createTheme(themeInput, credentials.getUser(), Set.of(),
                                                   themeInput.getSeasons().stream().map(seasonService::getSeason)
                                                             .collect(Collectors.toList())));
     } else if (credentials.hasAnyRole(UserRole.Role.Mentor)) {
-        return new Theme(themeService.createTheme(themeInput, file, credentials.getUser(), Set.of(credentials.getUser()),
+        return new Theme(themeService.createTheme(themeInput, credentials.getUser(), Set.of(credentials.getUser()),
                                                   List.of(seasonService.getLastByRegisteringSeason())));
     } else {
         final var e = new AccessDeniedException("Can not create theme by this user. Check user roles.");
@@ -143,16 +137,15 @@ throws AccessDeniedException, FileSystemException {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
 @MutationMapping
 public
-Theme updateTheme(final Authentication authentication, @Argument final Long themeId, @Argument final ThemeInput themeInput)
+Theme updateTheme(final Authentication authentication, @Argument final Long themeId,
+                  @Argument @Valid final ThemeInput themeInput)
 throws AccessDeniedException, FileSystemException {
     final var credentials = Credentials.from(authentication);
-    final var file =
-            storageService.save(themeInput.getPresentationSlide(), credentials.getUser(), FileAccessPolicy.Registered);
     if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)) {
-        return new Theme(themeService.updateTheme(themeId, themeInput, file, credentials.getUser()));
+        return new Theme(themeService.updateTheme(themeId, themeInput, credentials.getUser()));
     } else if (credentials.hasAnyRole(UserRole.Role.Mentor, UserRole.Role.Participant) &&
                themeService.getTheme(themeId).getAuthor().equals(credentials.getUser())) {
-        return new Theme(themeService.updateTheme(themeId, themeInput, file, credentials.getUser()));
+        return new Theme(themeService.updateTheme(themeId, themeInput, credentials.getUser()));
     } else {
         throw new AccessDeniedException("Access denied");
     }
@@ -203,7 +196,7 @@ Theme detachMentorsFromTheme(final Authentication authentication, @Argument fina
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
-Theme changeThemeState(@Argument final Long themeId, @Argument final ThemeState state) {
+Theme changeThemeState(@Argument final Long themeId, @Argument @Valid final ThemeState state) {
     return new Theme(themeService.changeThemeState(themeId, state));
 }
 }

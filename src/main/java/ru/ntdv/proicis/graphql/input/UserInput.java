@@ -7,7 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
-import static ru.ntdv.proicis.constant.Validations.*;
+import static ru.ntdv.proicis.constant.ValidationStrings.*;
 
 @Data
 @AllArgsConstructor
@@ -30,7 +30,7 @@ private String thirdName;
 
 @Size(min = URLVKONTAKTE_SIZE_MIN, max = URLVKONTAKTE_SIZE_MAX, message = URLVKONTAKTE_SIZE_MESSAGE)
 @Pattern(regexp = URLVKONTAKTE_PATTERN_REGEXP, message = URLVKONTAKTE_PATTERN_MESSAGE)
-@NotNull(message = URLTELEGRAM_NOTNULL_MESSAGE)
+@NotNull(message = URLVKONTAKTE_NOTNULL_MESSAGE)
 private String urlVkontakte;
 
 @Size(min = URLTELEGRAM_SIZE_MIN, max = URLTELEGRAM_SIZE_MAX, message = URLTELEGRAM_SIZE_MESSAGE)
