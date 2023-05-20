@@ -28,15 +28,15 @@ private String secondName;
 @NotNull(message = THIRDNAME_NOTNULL_MESSAGE)
 private String thirdName;
 
-@Size(min = URLVKONTAKTE_SIZE_MIN, max = URLVKONTAKTE_SIZE_MAX, message = URLVKONTAKTE_SIZE_MESSAGE)
-@Pattern(regexp = URLVKONTAKTE_PATTERN_REGEXP, message = URLVKONTAKTE_PATTERN_MESSAGE)
-@NotNull(message = URLVKONTAKTE_NOTNULL_MESSAGE)
-private String urlVkontakte;
+//@Size(min = URLVKONTAKTE_SIZE_MIN, max = URLVKONTAKTE_SIZE_MAX, message = URLVKONTAKTE_SIZE_MESSAGE)
+//@Pattern(regexp = URLVKONTAKTE_PATTERN_REGEXP, message = URLVKONTAKTE_PATTERN_MESSAGE)
+//@NotNull(message = URLVKONTAKTE_NOTNULL_MESSAGE)
+//private String urlVkontakte;
 
-@Size(min = URLTELEGRAM_SIZE_MIN, max = URLTELEGRAM_SIZE_MAX, message = URLTELEGRAM_SIZE_MESSAGE)
-@Pattern(regexp = URLTELEGRAM_PATTERN_REGEXP, message = URLTELEGRAM_PATTERN_MESSAGE)
-@NotNull(message = URLTELEGRAM_NOTNULL_MESSAGE)
-private String urlTelegram;
+//@Size(min = URLTELEGRAM_SIZE_MIN, max = URLTELEGRAM_SIZE_MAX, message = URLTELEGRAM_SIZE_MESSAGE)
+//@Pattern(regexp = URLTELEGRAM_PATTERN_REGEXP, message = URLTELEGRAM_PATTERN_MESSAGE)
+//@NotNull(message = URLTELEGRAM_NOTNULL_MESSAGE)
+//private String urlTelegram;
 
 @Size(min = GROUP_SIZE_MIN, max = GROUP_SIZE_MAX, message = GROUP_SIZE_MESSAGE)
 @Pattern(regexp = GROUP_PATTERN_REGEXP, message = GROUP_PATTERN_MESSAGE)

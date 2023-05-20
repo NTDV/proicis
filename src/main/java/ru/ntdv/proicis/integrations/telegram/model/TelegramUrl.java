@@ -1,6 +1,5 @@
-package ru.ntdv.proicis.integrations.telegram;
+package ru.ntdv.proicis.integrations.telegram.model;
 
-import ru.ntdv.proicis.crud.model.User;
 import ru.ntdv.proicis.integrations.contract.Url;
 
 import java.net.MalformedURLException;
@@ -14,10 +13,6 @@ class TelegramUrl implements Url {
 private static final Pattern pattern = Pattern.compile(URLTELEGRAM_PATTERN_REGEXP);
 private final URL url;
 
-public
-TelegramUrl(final User user) throws IllegalArgumentException {
-    this(user.getUrlVkontakte());
-}
 
 public
 TelegramUrl(String stringUrl) throws IllegalArgumentException {

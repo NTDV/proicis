@@ -30,8 +30,8 @@ import ru.ntdv.proicis.crud.service.FileService;
 import ru.ntdv.proicis.crud.service.UserService;
 import ru.ntdv.proicis.graphql.input.CredentialsInput;
 import ru.ntdv.proicis.graphql.input.UserInput;
-import ru.ntdv.proicis.security.LoginManager;
-import ru.ntdv.proicis.security.PasswordManager;
+import ru.ntdv.proicis.security.manager.LoginManager;
+import ru.ntdv.proicis.security.manager.PasswordManager;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -80,15 +80,13 @@ throws CsvValidationException {
             final String secondName = lineInArray[1];
             final String thirdName = lineInArray[2];
             final String group = lineInArray[3];
-            final String vk = lineInArray[4];
-            final String tg = lineInArray[5];
 
             final String rawLogin = LoginManager.generateLogin(firstName, secondName, thirdName);
             final String login = rawLogin + credentialsService.getLatestPostfix(rawLogin);
             final String password = PasswordManager.generateRandomPassword();
 
             final var credentials = new CredentialsInput(login, password);
-            final var user = new UserInput(firstName, secondName, thirdName, vk, tg, group, "");
+            final var user = new UserInput(firstName, secondName, thirdName, group, "");
 
             final var errors = validator.validate(user);
             if (!errors.isEmpty()) {

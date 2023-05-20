@@ -1,6 +1,5 @@
 package ru.ntdv.proicis.integrations.vkontakte;
 
-import ru.ntdv.proicis.crud.model.User;
 import ru.ntdv.proicis.integrations.contract.Url;
 
 import java.net.MalformedURLException;
@@ -13,11 +12,6 @@ public
 class VkontakteUrl implements Url {
 private static final Pattern pattern = Pattern.compile(URLVKONTAKTE_PATTERN_REGEXP);
 private final URL url;
-
-public
-VkontakteUrl(final User user) throws IllegalArgumentException {
-    this(user.getUrlVkontakte());
-}
 
 public
 VkontakteUrl(final String stringUrl) throws IllegalArgumentException {

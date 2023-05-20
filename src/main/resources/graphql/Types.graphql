@@ -70,8 +70,8 @@ type User {
   secondName: String!
   thirdName: String!
 
-  urlVkontakte: Url!
-  urlTelegram: Url!
+  #urlVkontakte: Url!
+  telegramUsername: String!
 
   group: String!
   organization: String!
@@ -82,8 +82,8 @@ input UserInput {
   secondName: String!
   thirdName: String!
 
-  urlVkontakte: String!
-  urlTelegram: String!
+  #urlVkontakte: String!
+  #urlTelegram: String!
 
   group: String!
   organization: String!
