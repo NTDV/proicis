@@ -4,7 +4,7 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
@@ -22,7 +22,7 @@ private ProicisTelegramBot proicisTelegramBot;
 private UserService userService;
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
-@QueryMapping
+@MutationMapping
 public
 Boolean sendTelegramMessage(@Argument @Valid final Long userId, @Argument @Valid final String message) {
     return userService.findUserById(userId)
