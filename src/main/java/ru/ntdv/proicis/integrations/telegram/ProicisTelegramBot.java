@@ -1,12 +1,16 @@
 package ru.ntdv.proicis.integrations.telegram;
 
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import ru.ntdv.proicis.crud.service.SecretCodeService;
 import ru.ntdv.proicis.crud.service.UserService;
 import ru.ntdv.proicis.integrations.telegram.command.CommandContainer;
@@ -61,5 +65,16 @@ void onUpdateReceived(final Update update) {
 public
 String getBotUsername() {
     return botUsername;
+}
+
+@PostConstruct
+public
+void registerBot() {
+    try {
+        val telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+        telegramBotsApi.registerBot(this);
+    } catch (TelegramApiException e) {
+        log.error(e.getMessage());
+    }
 }
 }
