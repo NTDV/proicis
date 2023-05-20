@@ -2,8 +2,10 @@ package ru.ntdv.proicis.buisness.robot;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ru.ntdv.proicis.constant.Stage;
+import ru.ntdv.proicis.crud.model.SecretCode;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -17,7 +19,8 @@ private final Map<Robot, RobotState> state;
 private
 RobotStateManager() {
     final EnumMap<Robot, RobotState> map = new EnumMap<>(Robot.class);
-    map.put(Robot.STAGE_INFO_REGISTERING_END, new RobotState(false));
+    map.put(Robot.STAGEINFO_REGISTERING_END, new RobotState());
+    map.put(Robot.SECRETCODE_DELETE_EXPIRED, new RobotState());
 
     if (map.size() != Robot.values().length) {
         throw new NullPointerException("Robot state is null.");
@@ -46,8 +49,10 @@ private
 <T> void setEnabledFor(final T obj, final boolean enabled) {
     if (obj instanceof final Stage stage) {
         if (Objects.requireNonNull(stage) == Stage.Registering) {
-            setEnabledFor(Robot.STAGE_INFO_REGISTERING_END, enabled);
+            setEnabledFor(Robot.STAGEINFO_REGISTERING_END, enabled);
         }
+    } else if (obj instanceof SecretCode) {
+        setEnabledFor(Robot.SECRETCODE_DELETE_EXPIRED, enabled);
     }
 }
 
@@ -72,15 +77,17 @@ void enable(final Robot robot) {
 }
 
 enum Robot {
-    STAGE_INFO_REGISTERING_END
+    STAGEINFO_REGISTERING_END,
+    SECRETCODE_DELETE_EXPIRED,
 }
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public
+public static
 class RobotState {
     //private final Robots robot;
-    private boolean enabled;
+    private boolean enabled = true;
 }
 }

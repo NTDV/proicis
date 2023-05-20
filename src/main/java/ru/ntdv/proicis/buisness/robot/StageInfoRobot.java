@@ -23,7 +23,7 @@ private StageInfoService stageInfoService;
 @Async
 public
 void handleRegisteringEnd() {
-    if (!robotStateManager.isEnabled(RobotStateManager.Robot.STAGE_INFO_REGISTERING_END)) return;
+    if (!robotStateManager.isEnabled(RobotStateManager.Robot.STAGEINFO_REGISTERING_END)) return;
 
     final var stagesInfos = stageInfoService.getUnhandledAndEndedByStage(Stage.Registering);
     for (final StageInfo stagesInfo : stagesInfos) {
@@ -33,7 +33,7 @@ void handleRegisteringEnd() {
     log.info("Worked!");
 
     if (!stageInfoService.hasUnhandledByStage(Stage.Registering)) {
-        robotStateManager.disable(RobotStateManager.Robot.STAGE_INFO_REGISTERING_END);
+        robotStateManager.disable(RobotStateManager.Robot.STAGEINFO_REGISTERING_END);
     }
 }
 }

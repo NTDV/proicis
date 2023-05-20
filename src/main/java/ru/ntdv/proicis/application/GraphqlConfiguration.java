@@ -4,7 +4,10 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import graphql.scalars.ExtendedScalars;
-import graphql.schema.*;
+import graphql.schema.Coercing;
+import graphql.schema.CoercingParseLiteralException;
+import graphql.schema.CoercingParseValueException;
+import graphql.schema.CoercingSerializeException;
 import jakarta.servlet.ServletException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,9 +45,9 @@ public
 class GraphqlConfiguration {
 @Bean
 RuntimeWiringConfigurer runtimeWiringConfigurer() {
-    GraphQLScalarType uploadScalar = GraphQLScalarType.newScalar().name("Upload").coercing(new UploadCoercing()).build();
+    //GraphQLScalarType uploadScalar = GraphQLScalarType.newScalar().name("Upload").coercing(new UploadCoercing()).build();
     return wiringBuilder -> wiringBuilder.scalar(ExtendedScalars.DateTime).scalar(ExtendedScalars.UUID)
-                                         .scalar(ExtendedScalars.Url).scalar(uploadScalar);
+                                         .scalar(ExtendedScalars.Url);//.scalar(uploadScalar);
 }
 
 @Bean

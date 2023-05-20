@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.graphql.controller;
 
+import jakarta.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import ru.ntdv.proicis.constant.TeamState;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.UserRole;
@@ -24,6 +26,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
+@Validated
 public
 class TeamController {
 
@@ -73,7 +76,7 @@ Set<Team> getMyTeams(Authentication authentication) {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Participant" })
 @MutationMapping
 public
-Team createTeam(Authentication authentication, @Argument final TeamInput teamInput)
+Team createTeam(Authentication authentication, @Argument @Valid final TeamInput teamInput)
 throws AccessDeniedException, BadCredentialsException {
     final var credentials = Credentials.from(authentication);
     if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)) {
@@ -88,7 +91,7 @@ throws AccessDeniedException, BadCredentialsException {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Participant" })
 @MutationMapping
 public
-Team updateTeam(Authentication authentication, @Argument final Long teamId, @Argument final TeamInput teamInput)
+Team updateTeam(Authentication authentication, @Argument final Long teamId, @Argument @Valid final TeamInput teamInput)
 throws AccessDeniedException, BadCredentialsException {
     final var credentials = Credentials.from(authentication);
     if (credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)) {
@@ -121,7 +124,7 @@ throws AccessDeniedException, BadCredentialsException {
 @MutationMapping
 public
 Team addParticipantToTeam(final Authentication authentication, @Argument final Long teamId,
-                          @Argument final ParticipantAttachmentInput participantInfo)
+                          @Argument @Valid final ParticipantAttachmentInput participantInfo)
 throws AccessDeniedException, BadCredentialsException {
     final var credentials = Credentials.from(authentication);
     if ((credentials.hasAnyRole(UserRole.Role.Administrator, UserRole.Role.Moderator)
@@ -211,7 +214,7 @@ Team removeTheme(@Argument final Long teamId) {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
 public
-Team changeTeamState(@Argument final Long teamId, @Argument final TeamState state) {
+Team changeTeamState(@Argument final Long teamId, @Argument @Valid final TeamState state) {
     return new Team(teamService.changeTeamState(teamId, state));
 }
 

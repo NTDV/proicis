@@ -18,10 +18,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ntdv.proicis.buisness.model.File;
 import ru.ntdv.proicis.buisness.service.StorageService;
@@ -33,9 +30,8 @@ import ru.ntdv.proicis.crud.service.FileService;
 import ru.ntdv.proicis.crud.service.UserService;
 import ru.ntdv.proicis.graphql.input.CredentialsInput;
 import ru.ntdv.proicis.graphql.input.UserInput;
-import ru.ntdv.proicis.graphql.model.FileUploadResult;
-import ru.ntdv.proicis.security.LoginManager;
-import ru.ntdv.proicis.security.PasswordManager;
+import ru.ntdv.proicis.security.manager.LoginManager;
+import ru.ntdv.proicis.security.manager.PasswordManager;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -68,22 +64,9 @@ FileController(final FileService fileService, final CredentialsService credentia
 }
 
 @MutationMapping
-public
-FileUploadResult uploadFile(final Authentication authentication, @Argument final MultipartFile file,
-                            @Argument final List<FileAccessPolicy> policy) throws FileUploadException {
-    //logger.info("Upload file: name={}", file.getOriginalFilename());
-    try {
-        return new FileUploadResult(storageService.save(file, Credentials.from(authentication).getUser(),
-                                                        policy.toArray(new FileAccessPolicy[0])));
-    } catch (final FileSystemException e) {
-        throw new FileUploadException("Can not upload file", e);
-    }
-}
-
-@MutationMapping
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 public
-FileUploadResult importParticipants(final Authentication authentication, @Argument final MultipartFile file)
+UUID importParticipants(final Authentication authentication, @Argument final MultipartFile file)
 throws CsvValidationException {
     final var owner = Credentials.from(authentication).getUser();
     final var data = new LinkedList<Triple<CredentialsInput, UserInput, UserRole.Role>>();
@@ -97,15 +80,13 @@ throws CsvValidationException {
             final String secondName = lineInArray[1];
             final String thirdName = lineInArray[2];
             final String group = lineInArray[3];
-            final String vk = lineInArray[4];
-            final String tg = lineInArray[5];
 
             final String rawLogin = LoginManager.generateLogin(firstName, secondName, thirdName);
             final String login = rawLogin + credentialsService.getLatestPostfix(rawLogin);
             final String password = PasswordManager.generateRandomPassword();
 
             final var credentials = new CredentialsInput(login, password);
-            final var user = new UserInput(firstName, secondName, thirdName, vk, tg, group, "");
+            final var user = new UserInput(firstName, secondName, thirdName, group, "");
 
             final var errors = validator.validate(user);
             if (!errors.isEmpty()) {
@@ -131,14 +112,26 @@ throws CsvValidationException {
                                                                                     Set.of(FileAccessPolicy.Administrators,
                                                                                            FileAccessPolicy.Moderators)));
         storageService.store(out, name, fileObject.getId().toString());
-        return new FileUploadResult(fileObject.getId());
+        return fileObject.getId();
     } catch (final FileSystemException e) {
         logger.error("Result saving error", e);
         throw new CsvValidationException("Can not save results of operation");
     }
 }
 
-@RequestMapping(value = "/files/{file_name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+@PostMapping("/files/upload")
+public
+UUID handleFileUpload(final Authentication authentication, @RequestParam MultipartFile file,
+                      @RequestParam final List<FileAccessPolicy> policy) throws FileUploadException {
+    try {
+        return storageService.save(file, Credentials.from(authentication).getUser(), policy.toArray(new FileAccessPolicy[0]))
+                             .getId();
+    } catch (final FileSystemException e) {
+        throw new FileUploadException("Can not upload file", e);
+    }
+}
+
+@GetMapping(value = "/files/{file_name:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
 @ResponseBody
 public
 FileSystemResource getFile(final Authentication authentication, @PathVariable("file_name") String fileName,

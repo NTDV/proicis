@@ -15,8 +15,8 @@ private String firstName;
 private String secondName;
 private String thirdName;
 
-private String urlVkontakte;
-private String urlTelegram;
+//private String urlVkontakte;
+private String telegramUsername;
 
 private String group;
 private String organization;
@@ -28,9 +28,10 @@ User(final ru.ntdv.proicis.crud.model.User dbUser) {
     firstName = dbUser.getFirstName();
     secondName = dbUser.getSecondName();
     thirdName = dbUser.getThirdName();
-    urlVkontakte = dbUser.getUrlVkontakte();
-    urlTelegram = dbUser.getUrlTelegram();
-    group = dbUser.getGroup();
+    //urlVkontakte = dbUser.getUrlVkontakte();
+    telegramUsername = dbUser.getTelegramUsername() == null ?
+                       (dbUser.getTelegramChatId() == null ? null : "Не указано") :
+                       "@" + dbUser.getTelegramUsername();
     organization = dbUser.getOrganization();
 }
 }

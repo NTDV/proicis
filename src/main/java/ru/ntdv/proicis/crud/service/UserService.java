@@ -121,4 +121,18 @@ public
 Optional<User> findUserById(final Long userId) {
     return userRepository.findById(userId);
 }
+
+public
+void unlinkTelegramByChatId(final Long chatId) {
+    userRepository.findFirstByTelegramChatId(chatId).ifPresent(user -> {
+        user.setTelegramChatId(null);
+        user.setTelegramUsername(null);
+        userRepository.save(user);
+    });
+}
+
+public
+User getUserByLogin(final String login) {
+    return credentialsRepository.findByLogin(login).getUser();
+}
 }
