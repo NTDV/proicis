@@ -15,7 +15,7 @@ class SendMessageService {
 private ProicisTelegramBot proicisTelegramBot;
 
 public
-void sendMessagesIgnoreExceptions(final Long chatId, final Iterable<String> messages) {
+void sendMessages(final Long chatId, final Iterable<String> messages) {
     messages.forEach(message -> sendMessage(chatId, message));
 }
 

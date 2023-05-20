@@ -18,6 +18,7 @@ public
 class ProicisTelegramBot extends TelegramLongPollingBot {
 public static final String COMMAND_PREFIX = "/";
 private final CommandContainer commandContainer;
+private final SendMessageService sendMessageService;
 @Value("${bot.name}")
 private String botUsername;
 
@@ -25,7 +26,18 @@ private String botUsername;
 ProicisTelegramBot(final SendMessageService sendMessageService, final UserService userService,
                    final SecretCodeService secretCodeService, @Value("${bot.token}") final String botToken) {
     super(botToken);
+    this.sendMessageService = sendMessageService;
     this.commandContainer = new CommandContainer(sendMessageService, userService, secretCodeService);
+}
+
+public
+void sendMessages(final Long chatId, final Iterable<String> messages) {
+    sendMessageService.sendMessages(chatId, messages);
+}
+
+public
+boolean sendMessage(final Long chatId, final String message) {
+    return sendMessageService.sendMessage(chatId, message);
 }
 
 @Override

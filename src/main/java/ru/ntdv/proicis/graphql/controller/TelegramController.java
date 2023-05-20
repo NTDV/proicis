@@ -9,7 +9,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import ru.ntdv.proicis.crud.service.UserService;
-import ru.ntdv.proicis.integrations.telegram.service.SendMessageService;
+import ru.ntdv.proicis.integrations.telegram.ProicisTelegramBot;
 
 @Validated
 @Controller
@@ -17,7 +17,7 @@ import ru.ntdv.proicis.integrations.telegram.service.SendMessageService;
 public
 class TelegramController {
 @Autowired
-private SendMessageService sendMessageService;
+private ProicisTelegramBot proicisTelegramBot;
 @Autowired
 private UserService userService;
 
@@ -26,7 +26,7 @@ private UserService userService;
 public
 Boolean sendTelegramMessage(@Argument @Valid final Long userId, @Argument @Valid final String message) {
     return userService.findUserById(userId)
-                      .filter(user -> sendMessageService.sendMessage(user.getTelegramChatId(), message))
+                      .filter(user -> proicisTelegramBot.sendMessage(user.getTelegramChatId(), message))
                       .isPresent();
 }
 }
