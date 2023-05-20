@@ -5,7 +5,10 @@ import ru.ntdv.proicis.integrations.telegram.service.SendMessageService;
 
 public
 class HelpCommand implements Command {
-public static final String HELP_MESSAGE = "Помощь";
+public static final String HELP_MESSAGE = "/start - Показать вступительное сообщение\n" +
+                                          "/bind - Прикрепить телеграмм к учётной записи\n" +
+                                          "/help - Получить информацию о доступных командах\n" +
+                                          "/stop - Остановить бота и отвязать от учётной записи";
 private final SendMessageService sendMessageService;
 
 public
