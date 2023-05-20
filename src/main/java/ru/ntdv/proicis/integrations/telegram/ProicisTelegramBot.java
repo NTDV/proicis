@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.integrations.telegram;
 
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,6 +14,7 @@ import ru.ntdv.proicis.integrations.telegram.service.SendMessageService;
 
 import static ru.ntdv.proicis.integrations.telegram.command.CommandName.NO;
 
+@Slf4j
 @Component
 public
 class ProicisTelegramBot extends TelegramLongPollingBot {
@@ -23,6 +25,7 @@ private final SendMessageService sendMessageService;
 private String botUsername;
 
 @Autowired
+public
 ProicisTelegramBot(final UserService userService, final SecretCodeService secretCodeService,
                    @Value("${bot.token}") final String botToken) {
     super(botToken);
