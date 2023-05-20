@@ -4,7 +4,6 @@ import jakarta.annotation.Nullable;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.ntdv.proicis.buisness.robot.RobotStateManager;
 import ru.ntdv.proicis.crud.model.SecretCode;
 import ru.ntdv.proicis.crud.model.User;
@@ -32,7 +31,6 @@ boolean hasUnexpired() {
     return secretCodeRepository.existsByExpiresAfter(OffsetDateTime.now());
 }
 
-@Transactional
 public
 void deleteAllExpired() {
     secretCodeRepository.deleteAllByExpiresAfter(OffsetDateTime.now());
