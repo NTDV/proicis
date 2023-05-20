@@ -23,10 +23,10 @@ private final SendMessageService sendMessageService;
 private String botUsername;
 
 @Autowired
-ProicisTelegramBot(final SendMessageService sendMessageService, final UserService userService,
-                   final SecretCodeService secretCodeService, @Value("${bot.token}") final String botToken) {
+ProicisTelegramBot(final UserService userService, final SecretCodeService secretCodeService,
+                   @Value("${bot.token}") final String botToken) {
     super(botToken);
-    this.sendMessageService = sendMessageService;
+    this.sendMessageService = new SendMessageService(this);
     this.commandContainer = new CommandContainer(sendMessageService, userService, secretCodeService);
 }
 
