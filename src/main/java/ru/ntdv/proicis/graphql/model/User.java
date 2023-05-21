@@ -30,8 +30,9 @@ User(final ru.ntdv.proicis.crud.model.User dbUser) {
     thirdName = dbUser.getThirdName();
     //urlVkontakte = dbUser.getUrlVkontakte();
     telegramUsername = dbUser.getTelegramUsername() == null ?
-                       (dbUser.getTelegramChatId() == null ? null : "Не указано") :
+                       (dbUser.getTelegramChatId() == null ? "" : "Скрыт") :
                        "@" + dbUser.getTelegramUsername();
+    group = dbUser.getGroup();
     organization = dbUser.getOrganization();
 }
 }
