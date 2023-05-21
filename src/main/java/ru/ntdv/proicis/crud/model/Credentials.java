@@ -77,7 +77,7 @@ boolean isAccountNonExpired() {
 @Override
 public
 boolean isAccountNonLocked() {
-    return true;
+    return user.getState() != UserState.Banned;
 }
 
 @Override
@@ -89,8 +89,7 @@ boolean isCredentialsNonExpired() {
 @Override
 public
 boolean isEnabled() {
-    final var state = user.getState();
-    return state != UserState.Banned && state != UserState.Deleted;
+    return user.getState() != UserState.Deleted;
 }
 
 public

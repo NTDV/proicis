@@ -38,8 +38,8 @@ private String organization;
 
 public
 User(final UserInput userInput) {
-    //state = UserState.Unconfirmed;
-    state = UserState.Confirmed;
+    state = UserState.Unconfirmed;
+    //state = UserState.Confirmed;
     firstName = userInput.getFirstName();
     secondName = userInput.getSecondName();
     thirdName = userInput.getThirdName();
