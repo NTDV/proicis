@@ -13,7 +13,7 @@ import static ru.ntdv.proicis.constant.ValidationStrings.*;
 @AllArgsConstructor
 public
 class UserInput {
-@Size(min = FIRSTNAME_SIZE_MIN, max = FIRSTNAME_SIZE_MAX, message = FIRSTNAME_SIZE_MESSAGE)
+//@Size(min = FIRSTNAME_SIZE_MIN, max = FIRSTNAME_SIZE_MAX, message = FIRSTNAME_SIZE_MESSAGE)
 @Pattern(regexp = FIRSTNAME_PATTERN_REGEXP, message = FIRSTNAME_PATTERN_MESSAGE)
 @NotNull(message = FIRSTNAME_NOTNULL_MESSAGE)
 private String firstName;

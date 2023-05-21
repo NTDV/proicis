@@ -45,10 +45,9 @@ public static final String STAGE_NOTNULL_MESSAGE = "Поле этап должн
 
 public static final int FIRSTNAME_SIZE_MIN = 1;
 public static final int FIRSTNAME_SIZE_MAX = 32;
-public static final String FIRSTNAME_SIZE_MESSAGE =
-        "Имя должно содержать не менее " + FIRSTNAME_SIZE_MIN + " и не более " + FIRSTNAME_SIZE_MAX + " символов.";
 public static final String FIRSTNAME_PATTERN_REGEXP = "^[\\S]{" + FIRSTNAME_SIZE_MIN + "," + FIRSTNAME_SIZE_MAX + "}$";
-public static final String FIRSTNAME_PATTERN_MESSAGE = "Имя не должно содержать пробельных символов.";
+public static final String FIRSTNAME_PATTERN_MESSAGE = "Имя должно содержать не менее " + FIRSTNAME_SIZE_MIN +
+                                                       " и не более " + FIRSTNAME_SIZE_MAX + " символов без пробелов.";
 public static final String FIRSTNAME_NOTNULL_MESSAGE = "Поле имя должно содержать значение.";
 
 public static final int SECONDNAME_SIZE_MIN = 1;
