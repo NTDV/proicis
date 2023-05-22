@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.graphql.controller;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -83,7 +84,11 @@ User getParticipant(@Argument final Long userId) {
 @QueryMapping
 public
 User getMe(final Authentication authentication) {
-    return new User(Credentials.from(authentication).getUser());
+    val currentCredentials = Credentials.from(authentication);
+    val updatedUser = userService.getUserById(currentCredentials.getUser().getId());
+    currentCredentials.setUser(updatedUser);
+    // todo Данные аутентификации хранятся на клиенте, нужно как-то научиться их обновлять и не особо запариваться...
+    return new User(updatedUser);
 }
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
