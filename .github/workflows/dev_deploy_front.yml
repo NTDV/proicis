@@ -27,6 +27,7 @@ jobs:
       - name: Build React app
         run: |
           cd front
+          sed -i '/siteDomain/c\"siteDomain": "/proicis",' /src/consts.json
           unset CI
           npm ci
           npm run build
