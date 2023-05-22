@@ -24,7 +24,7 @@ const LogoutEl = () => {
       }
 
     return (
-        <Link to="/" style={{textDecoration: "none", outline: "0"}}>
+        <Link to={consts.siteDomain + "/"} style={{textDecoration: "none", outline: "0"}}>
           <div className='logout' onClick={logout}>
               <img src={logoutSVG} alt="logout" style={{height: '25px'}}/>
           </div>

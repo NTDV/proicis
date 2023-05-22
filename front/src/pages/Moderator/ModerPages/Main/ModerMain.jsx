@@ -1,12 +1,12 @@
 import React from "react";
 import ModerCards from "./ModerCards";
-import ModerHeader from "../ModerHeader";
+import Header from "../../../../UI/Header";
 
 const ModerMain = (props) => {
 
     return (
         <div className="moder">
-            <ModerHeader user={props.user} toggle_disabled={true}/>
+            <Header user={props.user} toggle_disabled={true}/>
             <ModerCards/>
         </div>
     )

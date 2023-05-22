@@ -102,3 +102,36 @@
 .close_button:active {
     background-color: #b66;
 }
+
+header {
+    background-color: #555B6E;
+    height: auto;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 5px;
+    transition: 0.3s;
+}
+
+header .headerNavigation {
+    padding: 0 0 1rem 0;
+}
+
+header .headerControls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.leavebtns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+}
+header span {
+    color: #eee;
+    padding: 0 5px;
+    cursor: default;
+}

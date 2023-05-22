@@ -8,6 +8,8 @@ import consts from './consts.json';
 import { useDispatch, useSelector } from 'react-redux';
 import SuccessPage from './pages/SuccessErorrPages/SuccessPage';
 import ErrorPage from './pages/SuccessErorrPages/ErrorPage';
+import AdminPage from './pages/AdminPage/AdminPage';
+import ParticipantPage from './pages/Participant/ParticipantPage';
 
 function App() {
 
@@ -26,7 +28,8 @@ function App() {
     reduxDispatch({type: "server/waiting"})
     axios.post(endpoint + "login", {
       username: 'Admin',
-      password: 'TbJDt27H@3U'
+      password: 'TbJDt27H@3U',
+      "remember-me": 'on'
     },
     {
       headers: {
@@ -51,6 +54,10 @@ function App() {
           firstName
           secondName
           thirdName
+          state
+          group
+          organization
+          telegramUsername
         }
       }
       `
@@ -111,9 +118,13 @@ function App() {
       {
         myRole === 'None' ?
         <WelcomePage whoAmI={whoAmI} endpoint={endpoint}/> :
-        myRole === 'Administrator' ?
+        myRole === 'Participant' ?
+        <ParticipantPage user={user}/> : 
+        myRole === 'Moderator' ?
         <ModerPage user={user}/> :
-        <h1>Nothing</h1>
+        myRole === 'Administrator' ?
+        <AdminPage setRole={setMyRole}/> :
+        <h1>Who are you?</h1>
       }
       <br/>
       <br/>

@@ -4,7 +4,7 @@ import CloseButton from "../../../../UI/CloseButton";
 import InputField from "../../../../UI/InputField";
 import axios from "axios";
 import consts from './../../../../consts.json';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 const CreateParticipantForm = ({closeFunc}) => {
 
@@ -13,12 +13,10 @@ const CreateParticipantForm = ({closeFunc}) => {
     const [firstName, setFirstName] = useState("");
     const [secondName, setSecondName] = useState("");
     const [thirdName, setThirdName] = useState("");
-    const [urlVK, setUrlVK] = useState("");
-    const [urlTG, setUrlTG] = useState("");
+    //const [urlVK, setUrlVK] = useState("");
+    //const [urlTG, setUrlTG] = useState("");
     const [group, setGroup] = useState("");
     const reduxDispatch = useDispatch();
-
-    const state = useSelector(state => state)
     
 
     function createParticipant_send(e) {
@@ -35,8 +33,6 @@ const CreateParticipantForm = ({closeFunc}) => {
                 firstName: "` + firstName + `"
                 secondName: "` + secondName + `"
                 thirdName: "` + thirdName + `"
-                urlVkontakte: "` + urlVK + `"
-                urlTelegram: "` + urlTG + `"
                 group: "` + group + `"
                 organization: "НИЯУ МИФИ"
               })
@@ -61,7 +57,6 @@ const CreateParticipantForm = ({closeFunc}) => {
           }
           else {
             reduxDispatch({type: "server/error", payload: e.data.errors[0].message});
-            console.log(1)
           }
         })
         .catch((e) => {
@@ -87,10 +82,12 @@ const CreateParticipantForm = ({closeFunc}) => {
             <InputField stateName="Иванович" state={thirdName} setState={setThirdName} />
             Группа
             <InputField stateName="Б22-504" state={group} setState={setGroup} required={'True'}/>
+            {/*
             Vk
             <InputField stateName="vk.com/ivanov337123" state={urlVK} setState={setUrlVK} />
             Telegram
             <InputField stateName="@vanya337123" state={urlTG} setState={setUrlTG} />
+            */}
             <button type="submit">Создать участника!</button>
         </form>
     )
