@@ -1,4 +1,5 @@
 {
     "endpoint": "https://charityradar.online/",
-    "qlendpoint": "https://charityradar.online/graphql"
+    "qlendpoint": "https://charityradar.online/graphql",
+    "siteDomain": "proicis"
 }
