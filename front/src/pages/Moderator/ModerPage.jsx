@@ -3,6 +3,7 @@ import './css/moder.css';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ModerMain from "./ModerPages/Main/ModerMain";
 import ModerParticipants from "./ModerPages/Participants/ModerParticipants";
+import consts from './../../consts.json';
 
 const ModerPage = (props) => {
 
@@ -10,8 +11,8 @@ const ModerPage = (props) => {
         <div className="moder">
             <BrowserRouter>
                 <Routes>
-                    <Route exact path="/" element={<ModerMain user={props.user}/>} />
-                    <Route exact path="/participants" element={<ModerParticipants user={props.user}/>} />
+                    <Route exact path={consts.siteDomain + "/"} element={<ModerMain user={props.user}/>} />
+                    <Route exact path={consts.siteDomain + "/participants"} element={<ModerParticipants user={props.user}/>} />
                 </Routes>
             </BrowserRouter>
         </div>
