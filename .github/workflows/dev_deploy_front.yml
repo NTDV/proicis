@@ -28,7 +28,7 @@ jobs:
         run: |
           cd front
           cat ./src/consts.json
-          sed -i '/siteDomain/c\"siteDomain": "/proicis",' ./src/consts.json
+          sed -i '/siteDomain/c\"siteDomain": "/proicis"' ./src/consts.json
           cat ./src/consts.json
           unset CI
           npm ci
