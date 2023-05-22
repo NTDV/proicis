@@ -25,7 +25,7 @@ const Participants = (props) => {
                     firstName
                     secondName
                     thirdName
-                    urlTelegram
+                    telegramUsername
                 }
             }
             `
@@ -38,10 +38,15 @@ const Participants = (props) => {
             withCredentials: true
           })
           .then((e) => {
-            let r = e.data.data.getAllParticipants.filter((user) => user.urlTelegram.contains("http") || user.urlTelegram.contains("@"));
-            console.log(r);
-            setShownParticipants(r);
             reduxDispatch({type: "server/gotResponse"})
+            if (e.data.errors !== undefined) {
+              reduxDispatch({type: "server/error", payload: e.data.errors[0].message})
+            }
+            else {
+              let r = e.data.data.getAllParticipants.filter((user) => !(user.telegramUsername.includes("http") || user.telegramUsername.includes("@")));
+              console.log(r)
+              setShownParticipants(r);
+            }
           })
           .catch((e) => {
             reduxDispatch({type: "server/gotResponse"});

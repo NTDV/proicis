@@ -55,6 +55,9 @@ function App() {
           secondName
           thirdName
           state
+          group
+          organization
+          telegramUsername
         }
       }
       `

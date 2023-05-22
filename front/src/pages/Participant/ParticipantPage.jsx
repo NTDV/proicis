@@ -10,7 +10,7 @@ const ParticipantPage = ({user}) => {
             <BrowserRouter>
                 <Header user={user} toggle_disabled={false}/>
                 {user.state !== "Confirmed" ?
-                <Unconfirmed/> :
+                <Unconfirmed user={user}/> :
                 <h1>There is nothing to see here, move along</h1>}
             </BrowserRouter>
         </div>
