@@ -6,16 +6,23 @@ import ru.ntdv.proicis.crud.contract.FileAccessPolicy;
 import ru.ntdv.proicis.crud.model.File;
 import ru.ntdv.proicis.crud.model.User;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.FileSystemException;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public
 interface StorageService {
+void store(final ByteArrayOutputStream stream, final String fileName) throws IOException;
+
 Path getRootPath();
 
 void init() throws FileNotFoundException;
+
+File save(final ByteArrayOutputStream stream, final String originalName, final User owner,
+          final FileAccessPolicy... fileAccessPolicy) throws IOException;
 
 File save(final MultipartFile file, final User owner, final FileAccessPolicy... fileAccessPolicy) throws FileSystemException;
 

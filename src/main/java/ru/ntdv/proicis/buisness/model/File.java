@@ -3,11 +3,15 @@ package ru.ntdv.proicis.buisness.model;
 import com.ibm.icu.text.Transliterator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.poi.sl.usermodel.PictureData;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.access.AccessDeniedException;
 import ru.ntdv.proicis.crud.contract.FileAccessPolicy;
 import ru.ntdv.proicis.crud.model.User;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Set;
 
@@ -29,6 +33,23 @@ File(final Path rootPath, final ru.ntdv.proicis.crud.model.File file) {
          cyryllicToLatin.transform(file.getOriginalName().replace(' ', '_')),
          file.getOwner().getId(),
          file.getAccessPolicy());
+}
+
+public
+FileInputStream getInputStream() throws IOException {
+    return new FileInputStream(path.toFile());
+}
+
+public
+PictureData.PictureType getPictureType() {
+    return switch (FilenameUtils.getExtension(originalName)) {
+        case "png" -> PictureData.PictureType.PNG;
+        case "jpg", "jpeg" -> PictureData.PictureType.JPEG;
+        case "gif" -> PictureData.PictureType.GIF;
+        case "bmp" -> PictureData.PictureType.BMP;
+        case "emf" -> PictureData.PictureType.EMF;
+        default -> PictureData.PictureType.UNKNOWN;
+    };
 }
 
 public

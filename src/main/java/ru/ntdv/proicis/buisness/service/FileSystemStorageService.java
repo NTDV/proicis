@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.buisness.service;
 
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -12,7 +13,9 @@ import ru.ntdv.proicis.crud.model.File;
 import ru.ntdv.proicis.crud.model.User;
 import ru.ntdv.proicis.crud.repository.FileRepository;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.FileSystemException;
@@ -39,6 +42,13 @@ FileSystemStorageService(final StorageProperties properties) throws IOException 
     }
 }
 
+public
+void store(final ByteArrayOutputStream stream, final String fileName) throws IOException {
+    try (val outputStream = new FileOutputStream(this.rootLocation.resolve(fileName).toFile())) {
+        stream.writeTo(outputStream);
+    }
+}
+
 @Override
 public
 Path getRootPath() {
@@ -53,6 +63,15 @@ void init() throws FileNotFoundException {
     } catch (IOException e) {
         throw new FileNotFoundException("Could not initialize storage");
     }
+}
+
+@Override
+public
+File save(final ByteArrayOutputStream stream, final String originalName, final User owner,
+          final FileAccessPolicy... fileAccessPolicy) throws IOException {
+    final File fileEntity = fileRepository.save(new File(originalName, owner, fileAccessPolicy));
+    store(stream, fileEntity.getId().toString());
+    return fileEntity;
 }
 
 @Override

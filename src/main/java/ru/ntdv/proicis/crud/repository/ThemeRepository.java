@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.ntdv.proicis.constant.ThemeState;
+import ru.ntdv.proicis.crud.model.Season;
 import ru.ntdv.proicis.crud.model.Theme;
 import ru.ntdv.proicis.crud.model.User;
 
+import java.util.List;
 import java.util.Set;
 
 @Repository
@@ -28,4 +30,6 @@ Theme setAuthorToTheme(@Param("themeId") final Long themeId, @Param("userId") fi
 @Query(value = "update Theme theme set state = :state where id = cast(:themeId as bigint) returning * ",
        nativeQuery = true)
 Theme changeThemeState(@Param("themeId") final Long themeId, @Param("state") final ThemeState state);
+
+List<Theme> findAllByStateInAndActiveInSeasonsContaining(final List<ThemeState> states, final Season season);
 }

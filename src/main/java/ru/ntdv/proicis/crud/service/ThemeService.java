@@ -90,4 +90,9 @@ public
 Theme changeThemeState(final Long themeId, final ThemeState state) {
     return themeRepository.changeThemeState(themeId, state);
 }
+
+public
+List<Theme> getAllWithStatesForSeason(final List<ThemeState> states, final Season season) {
+    return themeRepository.findAllByStateInAndActiveInSeasonsContaining(states, season);
+}
 }

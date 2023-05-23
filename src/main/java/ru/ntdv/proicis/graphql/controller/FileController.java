@@ -5,6 +5,7 @@ import com.opencsv.exceptions.CsvValidationException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Validation;
 import jakarta.validation.ValidationException;
+import lombok.val;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import org.apache.commons.lang3.tuple.Triple;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
@@ -21,18 +23,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ntdv.proicis.buisness.model.File;
+import ru.ntdv.proicis.buisness.service.DocumentService;
 import ru.ntdv.proicis.buisness.service.StorageService;
+import ru.ntdv.proicis.constant.ThemeState;
 import ru.ntdv.proicis.crud.contract.FileAccessPolicy;
 import ru.ntdv.proicis.crud.model.Credentials;
 import ru.ntdv.proicis.crud.model.UserRole;
-import ru.ntdv.proicis.crud.service.CredentialsService;
-import ru.ntdv.proicis.crud.service.FileService;
-import ru.ntdv.proicis.crud.service.UserService;
+import ru.ntdv.proicis.crud.service.*;
 import ru.ntdv.proicis.graphql.input.CredentialsInput;
 import ru.ntdv.proicis.graphql.input.UserInput;
 import ru.ntdv.proicis.security.manager.LoginManager;
 import ru.ntdv.proicis.security.manager.PasswordManager;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.FileSystemException;
@@ -52,15 +55,35 @@ private final StorageService storageService;
 private final UserService userService;
 private final CredentialsService credentialsService;
 private final FileService fileService;
+private final ThemeService themeService;
+private final SeasonService seasonService;
+private final DocumentService documentService;
 
 @Autowired
 public
 FileController(final FileService fileService, final CredentialsService credentialsService, final UserService userService,
-               final StorageService storageService) {
+               final StorageService storageService, final ThemeService themeService, final SeasonService seasonService) {
     this.fileService = fileService;
     this.credentialsService = credentialsService;
     this.userService = userService;
     this.storageService = storageService;
+    this.themeService = themeService;
+    this.seasonService = seasonService;
+    this.documentService = new DocumentService(storageService);
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator" })
+@QueryMapping
+UUID getThemePresentationWith(final Authentication authentication, @Argument final List<ThemeState> states,
+                              @Argument final Long seasonId, @Argument final UUID templateFile) throws IOException {
+    val season = seasonService.getSeason(seasonId);
+    val themes = themeService.getAllWithStatesForSeason(states, season);
+    val file = new File(storageService.getRootPath(), fileService.getById(templateFile));
+    val pptx = documentService.getThemesPresentationFrom(themes, season, file.getInputStream());
+    val out = new ByteArrayOutputStream();
+    pptx.write(out);
+    return storageService.save(out, "themes_presentation.pptx", Credentials.from(authentication).getUser(),
+                               new FileAccessPolicy[] { FileAccessPolicy.Public }).getId();
 }
 
 @MutationMapping
