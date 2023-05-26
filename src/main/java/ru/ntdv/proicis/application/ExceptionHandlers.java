@@ -21,19 +21,21 @@ public
 class ExceptionHandlers implements DataFetcherExceptionResolver {
 @Override
 public
-Mono<List<GraphQLError>> resolveException(Throwable exception, final DataFetchingEnvironment env) {
+Mono<List<GraphQLError>> resolveException(final Throwable exception, final DataFetchingEnvironment env) {
     log.debug("Exception name: {}", exception.getClass().getName());
     log.debug("Exception message: {}", exception.getMessage());
 
+    // todo Add exception handling for all exceptions
     if (exception instanceof ConstraintViolationException) {
-        final var joinedErrorMessage = ((ConstraintViolationException) exception).getConstraintViolations().stream()
-                                                                                 .map(ConstraintViolation::getMessage)
-                                                                                 .collect(Collectors.joining("     "));
+        final var joinedErrorMessage = ((ConstraintViolationException) exception)
+                .getConstraintViolations().stream().map(ConstraintViolation::getMessage).collect(Collectors.joining("\n"));
 
         return Mono.fromCallable(() -> Collections.singletonList(
                 GraphqlErrorBuilder.newError(env).errorType(ErrorType.ValidationError).message(joinedErrorMessage).build()));
+    } else {
+        return Mono.fromCallable(() -> Collections.singletonList(
+                GraphqlErrorBuilder.newError(env).errorType(ErrorType.ExecutionAborted).message(exception.getMessage())
+                                   .build()));
     }
-
-    return Mono.empty();
 }
 }

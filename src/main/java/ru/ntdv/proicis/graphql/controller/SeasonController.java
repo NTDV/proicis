@@ -1,5 +1,6 @@
 package ru.ntdv.proicis.graphql.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -39,14 +40,14 @@ List<Season> getAllSeasons() {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
 public
-Season createSeason(@Argument final SeasonInput seasonInput) {
+Season createSeason(@Argument @Valid final SeasonInput seasonInput) {
     return new Season(seasonController.createSeason(seasonInput));
 }
 
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
 public
-Season updateSeason(@Argument final Long seasonId, @Argument final SeasonInput seasonInput) {
+Season updateSeason(@Argument final Long seasonId, @Argument @Valid final SeasonInput seasonInput) {
     return new Season(seasonController.updateSeason(seasonId, seasonInput));
 }
 
@@ -61,7 +62,7 @@ boolean deleteSeason(@Argument final Long seasonId) {
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 @MutationMapping
 public
-Season addStageInfoToSeason(@Argument final Long seasonId, @Argument final StageInfoInput stageInfoInput) {
+Season addStageInfoToSeason(@Argument final Long seasonId, @Argument @Valid final StageInfoInput stageInfoInput) {
     return new Season(seasonController.addStageInfoToSeason(seasonId, stageInfoService.createStageInfo(stageInfoInput)));
 }
 

@@ -1,6 +1,7 @@
 package ru.ntdv.proicis.crud.model;
 
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +27,10 @@ private String firstName;
 private String secondName;
 private String thirdName;
 
-private String urlVkontakte;
-private String urlTelegram;
+@Nullable
+private Long telegramChatId;
+@Nullable
+private String telegramUsername;
 
 @Column(name = "user_group")
 private String group;
@@ -40,8 +43,7 @@ User(final UserInput userInput) {
     firstName = userInput.getFirstName();
     secondName = userInput.getSecondName();
     thirdName = userInput.getThirdName();
-    urlVkontakte = userInput.getUrlVkontakte();
-    urlTelegram = userInput.getUrlTelegram();
+    //urlTelegram = userInput.getUrlTelegram();
     group = userInput.getGroup();
     organization = userInput.getOrganization();
 }

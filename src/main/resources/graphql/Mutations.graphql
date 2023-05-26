@@ -31,9 +31,7 @@ type Mutation {
   #_____________________________________________ CREDENTIALS END _______________________________________________________
 
   #_____________________________________________ FILE START ____________________________________________________________
-  uploadFile(file: Upload!, policy: [FileAccessPolicy!]!): FileUploadResult!
-
-  importParticipants(file: Upload!): FileUploadResult!
+  importParticipants(file: UUID!): UUID!
   #_____________________________________________ FILE END ______________________________________________________________
 
   #_____________________________________________ TEAM START ____________________________________________________________
@@ -72,4 +70,8 @@ type Mutation {
   addSeasonToTheme(themeId: ID!, seasonId: ID!): Theme!
   removeSeasonFromTheme(themeId: ID!, seasonId: ID!): Theme!
   #_____________________________________________ THEME END _____________________________________________________________
+
+  #_____________________________________________ TELEGRAM START ________________________________________________________
+  sendTelegramMessage(userId: ID!, message: String!): Boolean!
+  #_____________________________________________ TELEGRAM END __________________________________________________________
 }

@@ -27,9 +27,7 @@ void run(final ApplicationArguments args) {
     userRoleService.persistRoles();
 
     if (userService.findUserById((long) 1).isPresent()) return;
-    final var adminUser = new UserInput("Admin1", "admin2", "admin3",
-                                        "https://vk.com/test", "https://t.me/test", "Б22-001",
-                                        "МИФИ");
+    final var adminUser = new UserInput("Имя", "Фамилия", "Отчество", "Б22-123", "МИФИ");
     final var credentials = new CredentialsInput("Admin", "TbJDt27H@3U");
     try {
         userService.register(credentials, adminUser, UserRole.Role.Administrator);

@@ -1,4 +1,4 @@
-package ru.ntdv.proicis.security;
+package ru.ntdv.proicis.security.manager;
 
 import java.security.SecureRandom;
 
