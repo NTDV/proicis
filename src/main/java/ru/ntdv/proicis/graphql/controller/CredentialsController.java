@@ -6,7 +6,9 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
+import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -96,5 +98,12 @@ String updateCredentials(@Argument @Valid final CredentialsInput oldCredentials,
 private
 Credentials checkCredentials(final CredentialsInput credentialsInput) throws UsernameNotFoundException {
     return credentialsService.login(credentialsInput.getLogin(), credentialsInput.getPassword());
+}
+
+@Secured({ "ROLE_Administrator", "ROLE_Moderator", "ROLE_Mentor", "ROLE_Participant" })
+@QueryMapping
+public
+String getMyLogin(final Authentication authentication) {
+    return Credentials.from(authentication).getLogin();
 }
 }
