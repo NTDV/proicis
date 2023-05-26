@@ -1,8 +1,9 @@
 import React from 'react';
 import './unconfirmed.css'
-import ConfirmTelegram from '../../../UI/ConfirmTelegram';
+import ConnectTelegram from '../../../UI/ConnectTelegram';
 
-const Unconfirmed = ({user}) => {
+const Unconfirmed = ({user}) => {       
+
     return (
         <div className='unconfirmed'>
             <h2>Похоже, ваш профиль пока не подтвердил модератор</h2>
@@ -17,8 +18,20 @@ const Unconfirmed = ({user}) => {
                 <span>Организация (для наставников): {user.organization} </span>
                 {user.telegramUsername !== "" ?
                 user.telegramUsername :
-                [<a>Привязать телеграм</a>, 
-                <ConfirmTelegram/>]}
+                [
+                <p style={{maxWidth: "30rem"}}>
+                    Большая часть взаимодействия у вами будет выстраена при помощи уведомлений через
+                    телеграм-бота. Чтобы они до вас доходили, необходимо привязать телеграм к аккаунту. 
+                    <br/>
+                    При нажатии на ссылку ниже будет сгенерирован код. Для привязки телеграма к аккаунту
+                    необходимо подать этот код боту @proicisbot с командой /bind. Чтобы операция
+                    выполнилась успешно, необходимо также подать с этой командой ваш логин. Пример:
+                    <br/>
+                    /bind 1234 my_login123
+                    <br/>
+                    Здесь 1234 - код, my_login123 - логин
+                </p>, 
+                <ConnectTelegram/>]}
             </div>
         </div>
     );

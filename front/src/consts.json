@@ -1,5 +1,5 @@
 {
     "endpoint": "https://charityradar.online/",
     "qlendpoint": "https://charityradar.online/graphql",
-    "siteDomain": "/a"
+    "siteDomain": "/"
 }
