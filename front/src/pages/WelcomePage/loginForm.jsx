@@ -9,6 +9,8 @@ import { useDispatch } from "react-redux";
 const LoginForm = (props) => {
     const [login, setLogin] = useState('');
     const [pwd, setPwd] = useState('');
+    const [rememberMe, setRememberMe] = useState(0);
+    
 
     const reduxDispatch = useDispatch();
 
@@ -17,7 +19,8 @@ const LoginForm = (props) => {
         reduxDispatch({type: "server/waiting"});
         axios.post(props.endpoint + "login", {
           username: login,
-          password: pwd
+          password: pwd,
+          "remember-me": (rememberMe) ? 'on' : undefined
         },
         {
           headers: {
@@ -51,8 +54,8 @@ const LoginForm = (props) => {
                 <InputField state={pwd} setState={setPwd} stateName='Пароль' id='welcomePwd' required='True' type='password'/>
             </div>
             <div className="text--center">
-                <input id="login__checkbox" name="remember-me" type="checkbox"/>
-                <span>Запомнить меня</span>
+                <input id="login_checkbox" name="remember-me" type="checkbox" onClick={(e)=>{setRememberMe(e.target.checked);}}/>
+                <label htmlFor="login_checkbox" style={{backgroundColor: "none", cursor: "pointer"}}>Запомнить меня</label>
             </div>
             <div className="formField">
                 <input id='welcomeSubmit' type="submit" value="Войти"/>

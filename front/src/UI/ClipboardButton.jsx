@@ -8,7 +8,7 @@ const ClipboardButton = ({text}) => {
 
     return (
         <button onClick={copyToClipboard}>
-            📋
+            {text} 📋
         </button>
     );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import Header from '../../UI/Header';
 import Unconfirmed from './Unconfirmed/Unconfirmed';
+import './participant.css';
 
 const ParticipantPage = ({user}) => {
 

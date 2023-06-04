@@ -11,7 +11,7 @@ const ModerPage = (props) => {
         <div className="moder">
             <BrowserRouter>
                 <Routes>
-                    <Route exact path={consts.siteDomain + "/"} element={<ModerMain user={props.user}/>} />
+                    <Route exact path={consts.siteDomain} element={<ModerMain user={props.user}/>} />
                     <Route exact path={consts.siteDomain + "/participants"} element={<ModerParticipants user={props.user}/>} />
                 </Routes>
             </BrowserRouter>

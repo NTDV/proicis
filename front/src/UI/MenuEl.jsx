@@ -11,7 +11,7 @@ const MenuEl = (props) => {
             <button className="menu_button" onClick={props.callbackf} disabled={props.toggle_disabled}>
                 <img src={menuSVG} alt="menu"/>
             </button>
-            <Link to={consts.siteDomain + "/"} style={{textDecoration: "none", outline: "0"}}>
+            <Link to={consts.siteDomain} style={{textDecoration: "none", outline: "0"}}>
                 <div className="home_button" style={(props.toggle_disabled) ? {display: 'none'} : {}}>
                     На главную
                 </div>

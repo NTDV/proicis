@@ -51,7 +51,8 @@ const ConnectTelegram = () => {
             <button onClick={connectTG}>Привязать телеграм</button> : 
             <p>Личный код (действует 15 минут): {connectTelegCode}
                 <br/>
-                Скопировать команду для бота: <ClipboardButton text={'/bind ' + connectTelegCode + ' ' + login}/>
+                Скопировать команду для бота: <br/>
+                <ClipboardButton text={'/bind ' + connectTelegCode + ' ' + login}/>
             </p>}
         </div>
     );
