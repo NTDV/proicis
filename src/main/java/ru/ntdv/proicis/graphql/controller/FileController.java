@@ -143,6 +143,7 @@ throws CsvValidationException {
 }
 
 @PostMapping("/files/upload")
+@ResponseBody
 public
 String handleFileUpload(final Authentication authentication, @RequestParam MultipartFile file) throws FileUploadException {
     //@RequestParam final String policy) throws FileUploadException {
