@@ -144,11 +144,13 @@ throws CsvValidationException {
 
 @PostMapping("/files/upload")
 public
-UUID handleFileUpload(final Authentication authentication, @RequestParam MultipartFile file) throws FileUploadException {
+String handleFileUpload(final Authentication authentication, @RequestParam MultipartFile file) throws FileUploadException {
     //@RequestParam final String policy) throws FileUploadException {
     try {
-        return storageService.save(file, Credentials.from(authentication).getUser(),
-                                   new FileAccessPolicy[] { FileAccessPolicy.Public }).getId();
+        val id = storageService.save(file, Credentials.from(authentication).getUser(),
+                                     new FileAccessPolicy[] { FileAccessPolicy.Public }).getId();
+        logger.info("New file uploaded.\nId=" + id.toString() + "\nFilename=" + file.getOriginalFilename());
+        return id.toString();
     } catch (final FileSystemException e) {
         throw new FileUploadException("Can not upload file", e);
     }
