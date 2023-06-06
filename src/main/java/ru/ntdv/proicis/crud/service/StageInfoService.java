@@ -9,6 +9,7 @@ import ru.ntdv.proicis.crud.model.StageInfo;
 import ru.ntdv.proicis.crud.repository.StageInfoRepository;
 import ru.ntdv.proicis.graphql.input.StageInfoInput;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -37,7 +38,7 @@ StageInfo createStageInfo(final StageInfoInput stageInfo) {
 }
 
 public
-StageInfo handle(final StageInfo stageInfo) {
+StageInfo handle(final StageInfo stageInfo) throws InstanceAlreadyExistsException {
     stageInfo.handle();
     return stageInfoRepository.save(stageInfo);
 }

@@ -9,6 +9,7 @@ import ru.ntdv.proicis.constant.Stage;
 import ru.ntdv.proicis.crud.model.StageInfo;
 import ru.ntdv.proicis.crud.service.StageInfoService;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -22,7 +23,7 @@ private StageInfoService stageInfoService;
 @Scheduled(cron = "0 * * * * *")
 @Async
 public
-void handleRegisteringEnd() {
+void handleRegisteringEnd() throws InstanceAlreadyExistsException {
     if (!robotStateManager.isEnabled(RobotStateManager.Robot.STAGEINFO_REGISTERING_END)) return;
 
     final var stagesInfos = stageInfoService.getUnhandledAndEndedByStage(Stage.Registering);

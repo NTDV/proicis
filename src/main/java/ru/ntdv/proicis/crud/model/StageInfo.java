@@ -5,10 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.thymeleaf.exceptions.AlreadyInitializedException;
 import ru.ntdv.proicis.constant.Stage;
 import ru.ntdv.proicis.graphql.input.StageInfoInput;
 
+import javax.management.InstanceAlreadyExistsException;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -39,8 +39,8 @@ StageInfo(final StageInfoInput stageInfo) {
 }
 
 public
-void handle() {
-    if (this.handled) throw new AlreadyInitializedException("This stage was already handled.");
+void handle() throws InstanceAlreadyExistsException {
+    if (this.handled) throw new InstanceAlreadyExistsException("This stage was already handled.");
     this.handled = true;
 }
 }
