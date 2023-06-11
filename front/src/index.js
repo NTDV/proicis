@@ -16,6 +16,10 @@ function reduxReducer(state = defaultState, action) {
             return {...state, waitingForServer: 1};
         case "server/gotResponse":
             return {...state, waitingForServer: 0};
+        case "server/loggedOut":
+            return {...state, waitingForServer: 0, myRole: "None"};
+        case "server/loggedIn":
+            return {...state, waitingForServer: 0, myRole: action.payload};
         case "server/success":
             return {...state, showingSuccessful: 1};
         case "server/successOK":

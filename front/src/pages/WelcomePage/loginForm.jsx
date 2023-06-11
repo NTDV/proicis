@@ -53,9 +53,9 @@ const LoginForm = (props) => {
                 <span hidden>Пароль</span></label>
                 <InputField state={pwd} setState={setPwd} stateName='Пароль' id='welcomePwd' required='True' type='password'/>
             </div>
-            <div className="text--center">
+            <div className="text--center"  style={{padding: "5px"}}>
                 <input id="login_checkbox" name="remember-me" type="checkbox" onClick={(e)=>{setRememberMe(e.target.checked);}}/>
-                <label htmlFor="login_checkbox" style={{backgroundColor: "none", cursor: "pointer"}}>Запомнить меня</label>
+                <label htmlFor="login_checkbox" style={{backgroundColor: "#F9F9F9", cursor: "pointer"}}>Запомнить меня</label>
             </div>
             <div className="formField">
                 <input id='welcomeSubmit' type="submit" value="Войти"/>

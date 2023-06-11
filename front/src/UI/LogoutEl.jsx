@@ -19,8 +19,8 @@ const LogoutEl = () => {
         },
         withCredentials: true
       })
-      .then((e) => {window.location.reload();})
-      .catch((e) => {console.log(e)});
+      .then((e) => {reduxDispatch({type: "server/loggedOut"})})
+      .catch((e) => {console.log(e);reduxDispatch({type: "server/gotResponse"});});
       }
 
     return (

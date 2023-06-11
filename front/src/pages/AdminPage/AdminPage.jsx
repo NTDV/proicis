@@ -1,7 +1,14 @@
 import React from 'react';
 import './admin.css';
+import { useDispatch } from 'react-redux';
 
-const AdminPage = ({setRole}) => {
+const AdminPage = () => {
+
+    const reduxDispatch = useDispatch();
+
+    function setRole(role) {
+        reduxDispatch({type: "server/loggedIn", payload: role});
+    }
 
     return (
         <div className='admin'>

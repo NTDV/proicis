@@ -16,11 +16,12 @@ function App() {
   const endpoint = consts.endpoint;
   const qlendpoint = endpoint + 'graphql';
 
-  const [myRole, setMyRole] = useState('None');
   const [user, setUser] = useState({});
   const sentRequest = useSelector(state => state.waitingForServer);
   const showSuccess = useSelector(state => state.showingSuccessful);
   const error = useSelector(state => state.error);
+  const myRole = useSelector(state => state.myRole);
+
   const reduxDispatch = useDispatch();
 
   function log_in(e) {
@@ -70,13 +71,11 @@ function App() {
       withCredentials: true
     })
     .then((e) => {
-      setMyRole(e.data.data.getMyRole);
       setUser(e.data.data.getMe);
-      reduxDispatch({type: "server/gotResponse"})
+      reduxDispatch({type: "server/loggedIn", payload: e.data.data.getMyRole})
     })
     .catch((e) => {
-      setMyRole('None');
-      reduxDispatch({type: "server/gotResponse"});
+      reduxDispatch({type: "server/loggedOut"});
     });
   }
   
@@ -123,7 +122,7 @@ function App() {
         myRole === 'Moderator' ?
         <ModerPage user={user}/> :
         myRole === 'Administrator' ?
-        <AdminPage setRole={setMyRole}/> :
+        <AdminPage/> :
         <h1>Who are you?</h1>
       }
       <br/>
