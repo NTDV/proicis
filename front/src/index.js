@@ -26,6 +26,8 @@ function reduxReducer(state = defaultState, action) {
             return {...state, showingSuccessful: 0};
         case "server/error":
             return {...state, error: action.payload};
+        case "global/error":
+            return {...state, error: action.payload};
         case "server/errorOK":
             return {...state, error: ""};
 
