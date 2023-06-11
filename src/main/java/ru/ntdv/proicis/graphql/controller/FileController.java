@@ -89,14 +89,15 @@ UUID getThemePresentationWith(final Authentication authentication, @Argument fin
 @MutationMapping
 @Secured({ "ROLE_Administrator", "ROLE_Moderator" })
 public
-UUID importParticipants(final Authentication authentication, @Argument final MultipartFile file)
+UUID importParticipants(final Authentication authentication, @Argument(name = "file") final UUID fileId)
 throws CsvValidationException {
     final var owner = Credentials.from(authentication).getUser();
     final var data = new LinkedList<Triple<CredentialsInput, UserInput, UserRole.Role>>();
     final var out = new StringBuilder();
     final var validator = Validation.buildDefaultValidatorFactory().getValidator();
-
-    try (final CSVReader reader = new CSVReader(new InputStreamReader(file.getInputStream()))) {
+    try (final CSVReader reader = new CSVReader(new InputStreamReader(
+            new File(storageService.getRootPath(), fileService.getById(fileId)).getInputStream()))
+    ) {
         String[] lineInArray;
         while ((lineInArray = reader.readNext()) != null) {
             final String firstName = lineInArray[0];
