@@ -20,7 +20,7 @@ public class HelloController {
 //    private HttpServletRequest request;
     @QueryMapping
     public Date getCurrentUserDateTime(){
-        OffsetDateTime offsetDateTime = now((LocaleContextHolder.getTimeZone()).toZoneId())
+        OffsetDateTime offsetDateTime = now((LocaleContextHolder.getTimeZone()).toZoneId());
         Date date = Date.from(offsetDateTime.toInstant());
         return date; // не уверен что стоит переводить конткретно в этот формат но тут более наглядно.
     }
