@@ -16,7 +16,10 @@ public class HelloController {
     private HttpServletRequest request;
     @QueryMapping
     public OffsetDateTime getCurrentUserDateTime(){
-
+        if(request == null){
+            System.out.println("Нет запроса");
+            return now();
+        }
         return now((RequestContextUtils.getTimeZone(request)).toZoneId());
     }
 }
