@@ -17,11 +17,11 @@ public class HelloController {
     @Autowired
     private HttpServletRequest request;
     @QueryMapping
-    public HttpServletRequest getCurrentUserDateTime(){
-        return request;
-    }
-//    public TimeZone getCurrentUserDateTime(){
-//        return RequestContextUtils.getTimeZone(request);
-//        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
+//    public HttpServletRequest getCurrentUserDateTime(){
+//        return request;
 //    }
+    public TimeZone getCurrentUserDateTime(){
+        return RequestContextUtils.getTimeZone(request);
+//        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
+    }
 }
