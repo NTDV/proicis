@@ -20,6 +20,7 @@ public class HelloController {
             System.out.println("Нет запроса");
             return now();
         }
+        System.out.println("Есть");
         return now((RequestContextUtils.getTimeZone(request)).toZoneId());
     }
 }
