@@ -53,6 +53,6 @@ type Query {
   generateSecretCode: String!
   #_____________________________________________ SECRETCODE END ______________________________________________________
 
-  getHello: String!
+  getCurrentUserDateTime: DateTime!
 
 }
