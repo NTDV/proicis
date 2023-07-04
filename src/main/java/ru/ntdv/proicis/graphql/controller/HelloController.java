@@ -8,6 +8,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.TimeZone;
 
 
@@ -15,14 +16,12 @@ import static java.time.OffsetDateTime.now;
 
 @Controller
 public class HelloController {
-    @Autowired
-    private HttpServletRequest request;
+//    @Autowired
+//    private HttpServletRequest request;
     @QueryMapping
-//    public HttpServletRequest getCurrentUserDateTime(){
-//        return request;
-//    }
-    public OffsetDateTime getCurrentUserDateTime(){
-        return now((LocaleContextHolder.getTimeZone()).toZoneId());
-//        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
+    public Date getCurrentUserDateTime(){
+        OffsetDateTime offsetDateTime = now((LocaleContextHolder.getTimeZone()).toZoneId())
+        Date date = Date.from(offsetDateTime.toInstant());
+        return date; // не уверен что стоит переводить конткретно в этот формат но тут более наглядно.
     }
 }
