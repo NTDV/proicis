@@ -19,9 +19,9 @@ public class HelloController {
 //    @Autowired
 //    private HttpServletRequest request;
     @QueryMapping
-    public Date getCurrentUserDateTime(){
-        OffsetDateTime offsetDateTime = now((LocaleContextHolder.getTimeZone()).toZoneId());
-        Date date = Date.from(offsetDateTime.toInstant());
-        return date; // не уверен что стоит переводить конткретно в этот формат но тут более наглядно.
+    public OffsetDateTime getCurrentUserDateTime(){
+//        OffsetDateTime offsetDateTime = now((LocaleContextHolder.getTimeZone()).toZoneId());
+//        Date date = Date.from(offsetDateTime.toInstant());
+        return now((LocaleContextHolder.getTimeZone()).toZoneId());
     }
 }
