@@ -5,12 +5,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.support.RequestContextUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.time.OffsetDateTime;
 import java.util.TimeZone;
+
+import static java.time.OffsetDateTime.now;
 
 @Controller
 public class HelloController {
     @QueryMapping
-    public TimeZone getCurrentUserDateTime(HttpServletRequest request){
-        return RequestContextUtils.getTimeZone(request);
+    public OffsetDateTime getCurrentUserDateTime(HttpServletRequest request){
+        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
     }
 }
