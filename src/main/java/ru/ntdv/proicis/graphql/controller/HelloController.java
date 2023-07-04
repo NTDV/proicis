@@ -7,6 +7,8 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.time.OffsetDateTime;
+import java.util.TimeZone;
+
 
 import static java.time.OffsetDateTime.now;
 
@@ -15,12 +17,8 @@ public class HelloController {
     @Autowired
     private HttpServletRequest request;
     @QueryMapping
-    public OffsetDateTime getCurrentUserDateTime(){
-        if(request == null){
-            System.out.println("Нет запроса");
-            return now();
-        }
-        System.out.println("Есть");
-        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
+    public TimeZone getCurrentUserDateTime(){
+        return RequestContextUtils.getTimeZone(request);
+//        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
     }
 }
