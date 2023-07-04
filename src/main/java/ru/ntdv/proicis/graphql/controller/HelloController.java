@@ -21,8 +21,8 @@ public class HelloController {
 //    public HttpServletRequest getCurrentUserDateTime(){
 //        return request;
 //    }
-    public TimeZone getCurrentUserDateTime(){
-        return LocaleContextHolder.getTimeZone();
+    public OffsetDateTime getCurrentUserDateTime(){
+        return now((LocaleContextHolder.getTimeZone()).toZoneId());
 //        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
     }
 }
