@@ -1,6 +1,7 @@
 package ru.ntdv.proicis.graphql.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -21,7 +22,7 @@ public class HelloController {
 //        return request;
 //    }
     public TimeZone getCurrentUserDateTime(){
-        return RequestContextUtils.getTimeZone(request);
+        return LocaleContextHolder.getTimeZone();
 //        return now((RequestContextUtils.getTimeZone(request)).toZoneId());
     }
 }
