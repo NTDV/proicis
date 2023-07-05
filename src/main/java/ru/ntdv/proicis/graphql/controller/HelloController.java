@@ -1,25 +1,18 @@
 package ru.ntdv.proicis.graphql.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.servlet.support.RequestContextUtils;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.time.OffsetDateTime;
-import java.util.Objects;
+import java.util.TimeZone;
 
 import static java.time.OffsetDateTime.now;
 
 @Controller
 public
 class HelloController {
-@Autowired
-private HttpServletRequest request;
-
-@QueryMapping
+@RequestMapping
 public
-OffsetDateTime getCurrentUserDateTime() {
-    return now(Objects.requireNonNull(RequestContextUtils.getTimeZone(request)).toZoneId());
+String getCurrentUserDateTime(TimeZone timeZone) {
+    return now(timeZone.toZoneId()).toString();
 }
 }
