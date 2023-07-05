@@ -57,7 +57,8 @@ SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
             .rememberMe().and()
 
             .securityMatcher("/**")
-            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/actuator/**", "/.well-known/**").permitAll()
+            .authorizeHttpRequests(auth -> auth.requestMatchers("/files/**", "/actuator/**", "/.well-known/**",
+                                                                "/getTime").permitAll()
                                                .requestMatchers("/**").denyAll())
             .build();
 }

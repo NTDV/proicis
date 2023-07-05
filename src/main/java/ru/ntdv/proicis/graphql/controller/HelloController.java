@@ -10,7 +10,7 @@ import static java.time.OffsetDateTime.now;
 @Controller
 public
 class HelloController {
-@RequestMapping
+@RequestMapping(path = "/getTime")
 public
 String getCurrentUserDateTime(TimeZone timeZone) {
     return now(timeZone.toZoneId()).toString();
