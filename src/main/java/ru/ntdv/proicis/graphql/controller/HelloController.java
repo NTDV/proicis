@@ -17,7 +17,7 @@ class HelloController {
     String getCurrentUserDateTime(TimeZone timeZone) {
         OffsetDateTime data = now(timeZone.toZoneId());
         return "<p>" + data.getHour() + ":" + data.getMinute() + " "
-                + data.getDayOfMonth() + "." + data.getMonth() + "." + data.getYear() + "</p>";
+                + data.getDayOfMonth() + " " + data.getMonth() + " " + data.getYear() + "</p>";
 //        return Date.from(now(timeZone.toZoneId()).toInstant()).toString();
     }
 }
