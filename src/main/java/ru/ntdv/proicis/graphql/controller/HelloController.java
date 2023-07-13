@@ -34,11 +34,12 @@ class HelloController {
             case DECEMBER -> month="Декабря";
         }
         return "<!DOCTYPE html>" +
-                "<html lang=\"en\">" +
+                "<html lang=\"ru\">" +
                 "<meta charset=\"utf-8\" />" +
                 "  <body>\n" +
                     "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
                     "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
+                    "<p>"+ "English" +"</p>" +
                 "  </body>\n" +
                 "</html>";
 //        return "<p>" + data.getHour() + ":" + data.getMinute() + " "
