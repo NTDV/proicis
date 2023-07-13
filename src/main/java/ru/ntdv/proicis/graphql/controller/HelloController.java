@@ -35,7 +35,7 @@ class HelloController {
         }
         return "<!DOCTYPE html>" +
                 "<html lang=\"ru\">" +
-                "<meta charset=\"UTF-8\">" +
+                "<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>" +
                 "  <body>\n" +
                     "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
                     "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
