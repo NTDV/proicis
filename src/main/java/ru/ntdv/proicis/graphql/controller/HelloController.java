@@ -33,13 +33,14 @@ class HelloController {
             case NOVEMBER -> month="Ноября";
             case DECEMBER -> month="Декабря";
         }
-        return "<!DOCTYPE html>\n" +
-                "<html lang=\"en\">\n" +
+        return "<!DOCTYPE html>" +
+                "<html lang=\"en\">" +
+                "<meta charset=\"utf-8\" />" +
                 "  <body>\n" +
                     "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
                     "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
                 "  </body>\n" +
-                "</html>\n";
+                "</html>";
 //        return "<p>" + data.getHour() + ":" + data.getMinute() + " "
 //                + data.getDayOfMonth() + " " + data.getMonth() + " " + data.getYear() + "</p>";
 //        return Date.from(now(timeZone.toZoneId()).toInstant()).toString();
