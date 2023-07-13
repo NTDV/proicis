@@ -16,8 +16,32 @@ class HelloController {
     public
     String getCurrentUserDateTime(TimeZone timeZone) {
         OffsetDateTime data = now(timeZone.toZoneId());
-        return "<p>" + data.getHour() + ":" + data.getMinute() + " "
-                + data.getDayOfMonth() + " " + data.getMonth() + " " + data.getYear() + "</p>";
+        //Я не смог найти простого способа для перевода и выбора для раставления склонений, и решил, что в данном случае
+        // рациональнее просто через условия :(
+        String month = "ошибка";
+        switch (data.getMonth()){
+            case JANUARY -> month="Января";
+            case FEBRUARY -> month="Февраля";
+            case MARCH -> month="Марта";
+            case APRIL -> month="Апреля";
+            case MAY -> month="Мая";
+            case JUNE ->month="Июня";
+            case JULY -> month="Июля";
+            case AUGUST -> month="Августа";
+            case SEPTEMBER -> month="Сентября";
+            case OCTOBER -> month="Октября";
+            case NOVEMBER -> month="Ноября";
+            case DECEMBER -> month="Декабря";
+        }
+        return "<!DOCTYPE html>\n" +
+                "<html lang=\"en\">\n" +
+                "  <body>\n" +
+                    "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
+                    "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
+                "  </body>\n" +
+                "</html>\n";
+//        return "<p>" + data.getHour() + ":" + data.getMinute() + " "
+//                + data.getDayOfMonth() + " " + data.getMonth() + " " + data.getYear() + "</p>";
 //        return Date.from(now(timeZone.toZoneId()).toInstant()).toString();
     }
 }
