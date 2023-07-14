@@ -12,7 +12,7 @@ import static java.time.OffsetDateTime.now;
 @RestController
 public
 class HelloController {
-    @RequestMapping(path = "/getTime", produces = "application/json; charset=utf-8")
+    @RequestMapping(value = "/getTime", produces = "charset=utf-8")
     public
     String getCurrentUserDateTime(TimeZone timeZone) {
         OffsetDateTime data = now(timeZone.toZoneId());
