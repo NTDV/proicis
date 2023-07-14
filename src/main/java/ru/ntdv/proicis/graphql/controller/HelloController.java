@@ -1,11 +1,10 @@
 package ru.ntdv.proicis.graphql.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
@@ -17,9 +16,8 @@ import static java.time.OffsetDateTime.now;
 @RestController
 public
 class HelloController {
-    @RequestMapping(value = "/getTime", method = RequestMethod.GET,
-            produces = "text/plain; charset=utf-8")
-    public ResponseEntity<String> getCurrentUserDateTime(TimeZone timeZone, HttpServletResponse response) {
+    @RequestMapping(value = "/getTime")
+    public ResponseEntity<String> getCurrentUserDateTime(TimeZone timeZone) {
         OffsetDateTime data = now(timeZone.toZoneId());
         //Я не смог найти простого способа для перевода и выбора для раставления склонений, и решил, что в данном случае
         // рациональнее просто через условия :(
