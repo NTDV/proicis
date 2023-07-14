@@ -14,7 +14,7 @@ import static java.time.OffsetDateTime.now;
 public
 class HelloController {
     @RequestMapping(value = "/getTime", method = RequestMethod.GET,
-            produces = "application/json; charset=utf-8")
+            produces = "text/plain; charset=utf-8")
     public
     String getCurrentUserDateTime(TimeZone timeZone) {
         OffsetDateTime data = now(timeZone.toZoneId());
@@ -38,11 +38,11 @@ class HelloController {
         return "<!DOCTYPE html>" +
                 "<html lang=\"ru\">" +
                 "<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>" +
-                "  <body>\n" +
+                "  <body>" +
                     "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
                     "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
                     "<p>"+ "English" +"</p>" +
-                "  </body>\n" +
+                "  </body>" +
                 "</html>";
 //        return "<p>" + data.getHour() + ":" + data.getMinute() + " "
 //                + data.getDayOfMonth() + " " + data.getMonth() + " " + data.getYear() + "</p>";
