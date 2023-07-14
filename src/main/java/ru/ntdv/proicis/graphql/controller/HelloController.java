@@ -1,5 +1,9 @@
 package ru.ntdv.proicis.graphql.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,8 +19,7 @@ public
 class HelloController {
     @RequestMapping(value = "/getTime", method = RequestMethod.GET,
             produces = "text/plain; charset=utf-8")
-    public
-    String getCurrentUserDateTime(TimeZone timeZone) {
+    public ResponseEntity<String> getCurrentUserDateTime(TimeZone timeZone, HttpServletResponse response) {
         OffsetDateTime data = now(timeZone.toZoneId());
         //Я не смог найти простого способа для перевода и выбора для раставления склонений, и решил, что в данном случае
         // рациональнее просто через условия :(
@@ -35,15 +38,26 @@ class HelloController {
             case NOVEMBER -> month="Ноября";
             case DECEMBER -> month="Декабря";
         }
-        return "<!DOCTYPE html>" +
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-type", "text/html;charset=UTF-8");
+        return new ResponseEntity<String>("<!DOCTYPE html>" +
                 "<html lang=\"ru\">" +
                 "<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>" +
                 "  <body>" +
-                    "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
-                    "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
-                    "<p>"+ "English" +"</p>" +
+                "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
+                "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
+                "<p>"+ "English" +"</p>" +
                 "  </body>" +
-                "</html>";
+                "</html>",headers , HttpStatus.OK);
+//        return "<!DOCTYPE html>" +
+//                "<html lang=\"ru\">" +
+//                "<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>" +
+//                "  <body>" +
+//                    "<p>" +"Текущее время: "+ data.getHour() + ":" + data.getMinute() + "</p>" +
+//                    "<p>" +"Дата: "+ data.getDayOfMonth() + " " + month + " " + data.getYear() +"</p>" +
+//                    "<p>"+ "English" +"</p>" +
+//                "  </body>" +
+//                "</html>";
 //        return "<p>" + data.getHour() + ":" + data.getMinute() + " "
 //                + data.getDayOfMonth() + " " + data.getMonth() + " " + data.getYear() + "</p>";
 //        return Date.from(now(timeZone.toZoneId()).toInstant()).toString();
