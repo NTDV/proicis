@@ -1,6 +1,7 @@
 package ru.ntdv.proicis.graphql.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
@@ -12,7 +13,8 @@ import static java.time.OffsetDateTime.now;
 @RestController
 public
 class HelloController {
-    @RequestMapping(value = "/getTime", produces = "charset=utf-8")
+    @RequestMapping(value = "/getTime", method = RequestMethod.GET,
+            produces = "application/json; charset=utf-8")
     public
     String getCurrentUserDateTime(TimeZone timeZone) {
         OffsetDateTime data = now(timeZone.toZoneId());
