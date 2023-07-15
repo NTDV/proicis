@@ -23,6 +23,7 @@ class HelloController {
     @RequestMapping(value = "/getTime")
     public ResponseEntity<String> getCurrentUserDateTime(TimeZone timeZone, @RequestParam(required = false, name = "timeZone") String ID) {
         logger.info("Starting getCurrentUserDateTime");
+        long startTime = System.nanoTime();
         OffsetDateTime data;
         if(ID==null) {
             data = now(timeZone.toZoneId());
@@ -57,7 +58,9 @@ class HelloController {
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "text/html;charset=UTF-8");
-        logger.info("Completing getCurrentUserDateTime");
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime);
+        logger.info("Completing getCurrentUserDateTime in " + duration + "ns");
         return new ResponseEntity<>("<!DOCTYPE html>" +
                 "<html lang=\"ru\">" +
                 "<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>" +
