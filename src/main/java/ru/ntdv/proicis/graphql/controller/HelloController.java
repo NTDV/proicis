@@ -44,15 +44,21 @@ class HelloController {
             case DECEMBER -> month="Декабря";
             default -> month="Ошибка";
         }
+        String bodeTime="<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
+                "<p>" + "Дата: " + data.getDayOfMonth() + " " + month + " " + data.getYear() + "</p>";
+        if(data.getHour()%2==0){
+            for(int i=0;i<999;++i){
+                bodeTime+= "<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
+                        "<p>" + "Дата: " + data.getDayOfMonth() + " " + month + " " + data.getYear() + "</p>";
+            }
+        }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "text/html;charset=UTF-8");
         return new ResponseEntity<>("<!DOCTYPE html>" +
                 "<html lang=\"ru\">" +
                 "<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>" +
                 "  <body>" +
-                "<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
-                "<p>" + "Дата: " + data.getDayOfMonth() + " " + month + " " + data.getYear() + "</p>" +
-                "<p>" + "English" + "</p>" +
+                bodeTime +
                 "  </body>" +
                 "</html>", headers, HttpStatus.OK);
     }
