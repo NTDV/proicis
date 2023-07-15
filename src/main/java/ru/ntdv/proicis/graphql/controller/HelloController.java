@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
 import java.util.TimeZone;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static java.time.OffsetDateTime.now;
 import static java.util.TimeZone.getTimeZone;
@@ -18,8 +19,10 @@ import static java.util.TimeZone.getTimeZone;
 @RestController
 public
 class HelloController {
+    private final Logger logger = LoggerFactory.getLogger(HelloController.class);
     @RequestMapping(value = "/getTime")
     public ResponseEntity<String> getCurrentUserDateTime(TimeZone timeZone, @RequestParam(required = false, name = "timeZone") String ID) {
+        logger.info("Starting getCurrentUserDateTime");
         OffsetDateTime data;
         if(ID==null) {
             data = now(timeZone.toZoneId());
@@ -48,12 +51,13 @@ class HelloController {
                 "<p>" + "Дата: " + data.getDayOfMonth() + " " + month + " " + data.getYear() + "</p>";
         if(data.getHour()%2==0){
             for(int i=0;i<999;++i){
-                bodeTime+= "<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
+                bodeTime += "<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
                         "<p>" + "Дата: " + data.getDayOfMonth() + " " + month + " " + data.getYear() + "</p>";
             }
         }
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-type", "text/html;charset=UTF-8");
+        logger.info("Completing getCurrentUserDateTime");
         return new ResponseEntity<>("<!DOCTYPE html>" +
                 "<html lang=\"ru\">" +
                 "<meta content='text/html; charset=UTF-8' http-equiv='Content-Type'/>" +
