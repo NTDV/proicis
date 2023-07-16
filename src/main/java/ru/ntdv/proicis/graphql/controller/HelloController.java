@@ -20,21 +20,10 @@ import static java.util.TimeZone.getTimeZone;
 public
 class HelloController {
     private final Logger logger = LoggerFactory.getLogger(HelloController.class);
-    @RequestMapping(value = "/getTime")
-    public ResponseEntity<String> getCurrentUserDateTime(TimeZone timeZone, @RequestParam(required = false, name = "timeZone") String ID) {
-        logger.info("Starting getCurrentUserDateTime");
-        long startTime = System.nanoTime();
-        OffsetDateTime data;
-        if(ID==null) {
-            data = now(timeZone.toZoneId());
-        } else {
-            data = now((getTimeZone(ID)).toZoneId());
-        }
-        //Я не смог найти простого способа для перевода и выбора для раставления склонений, и решил, что в данном случае
-        // рациональнее просто через условия :(
+    private String getBodyTime(OffsetDateTime data){
         String month;
-        switch (data.getMonth()){
-            case JANUARY -> month="Января";
+        switch (data.getMonth()){ // Возможно этот switch тоже следовало бы в отдельную функцию,
+            case JANUARY -> month="Января"; // но в моём случае мне пока не надо
             case FEBRUARY -> month="Февраля";
             case MARCH -> month="Марта";
             case APRIL -> month="Апреля";
@@ -48,12 +37,23 @@ class HelloController {
             case DECEMBER -> month="Декабря";
             default -> month="Ошибка";
         }
-        String bodeTime="<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
+        return "<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
                 "<p>" + "Дата: " + data.getDayOfMonth() + " " + month + " " + data.getYear() + "</p>";
+    }
+    @RequestMapping(value = "/getTime")
+    public ResponseEntity<String> getCurrentUserDateTime(TimeZone timeZone, @RequestParam(required = false, name = "timeZone") String ID) {
+        logger.info("Starting getCurrentUserDateTime"); // а делают из логирования про информацию отдельную
+        long startTime = System.nanoTime(); // функцию-обёртку с параметром названия функции? Ведь сам
+        OffsetDateTime data; // код должен часто повторяться
+        if(ID==null) {
+            data = now(timeZone.toZoneId());
+        } else {
+            data = now((getTimeZone(ID)).toZoneId());
+        }
+        String bodeTime=getBodyTime(data);
         if(data.getHour()%2==0){
             for(int i=0;i<999;++i){
-                bodeTime += "<p>" + "Текущее время: " + data.getHour() + ":" + data.getMinute() + "</p>" +
-                        "<p>" + "Дата: " + data.getDayOfMonth() + " " + month + " " + data.getYear() + "</p>";
+                bodeTime += getBodyTime(data);
             }
         }
         HttpHeaders headers = new HttpHeaders();
