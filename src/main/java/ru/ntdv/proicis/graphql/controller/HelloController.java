@@ -50,7 +50,7 @@ class HelloController {
         } else {
             data = now((getTimeZone(ID)).toZoneId());
         }
-        StringBuilder bodeTime= new StringBuilder(getBodyTime(data));
+        StringBuffer bodeTime= new StringBuffer(getBodyTime(data));
         if(data.getHour()%2==0){
             for(int i=0;i<999;++i){
                 bodeTime.append(getBodyTime(data));
