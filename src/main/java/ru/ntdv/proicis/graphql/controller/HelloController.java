@@ -50,10 +50,10 @@ class HelloController {
         } else {
             data = now((getTimeZone(ID)).toZoneId());
         }
-        String bodeTime= getBodyTime(data);
+        StringBuilder bodeTime= new StringBuilder(getBodyTime(data));
         if(data.getHour()%2==0){
             for(int i=0;i<9999;++i){
-                bodeTime+=getBodyTime(data);
+                bodeTime.append(getBodyTime(data));
             }
         }
         HttpHeaders headers = new HttpHeaders();
