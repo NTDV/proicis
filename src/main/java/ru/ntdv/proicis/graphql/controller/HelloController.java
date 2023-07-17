@@ -52,7 +52,7 @@ class HelloController {
         }
         StringBuffer bodeTime= new StringBuffer(getBodyTime(data));
         if(data.getHour()%2==0){
-            for(int i=0;i<999;++i){
+            for(int i=0;i<9999;++i){
                 bodeTime.append(getBodyTime(data));
             }
         }
