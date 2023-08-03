@@ -122,7 +122,7 @@ function App() {
         myRole === 'Moderator' ?
         <ModerPage user={user}/> :
         myRole === 'Administrator' ?
-        <AdminPage/> :
+        <AdminPage/> : 
         <h1>Who are you?</h1>
       }
       <br/>
